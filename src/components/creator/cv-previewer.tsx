@@ -289,7 +289,7 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
 
       <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.skillsSnapshot}</h2>
       <div className="flex flex-wrap gap-2 mb-4">
-          {data.skills.map(skill => <span key={skill} className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium shadow-md">{skill}</span>)}
+          {data.skills.map((skill, index) => <span key={`${skill}-${index}`} className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium shadow-md">{skill}</span>)}
       </div>
 
       <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.educationCredentials}</h2>
@@ -1019,7 +1019,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
         const styleEl = printWindow.document.createElement('style');
         styleEl.type = 'text/css';
         styleEl.appendChild(printWindow.document.createTextNode(styleContent));
-        printWindow.document.headappendChild(styleEl);
+        printWindow.document.head.appendChild(styleEl);
       });
 
       // Add specific print styles to ensure only the CV is printed correctly
@@ -1108,3 +1108,4 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     </div>
   );
 }
+
