@@ -24,7 +24,7 @@ const ParseCvDataOutputSchema = z.object({
   personalInfo: z.object({
     name: z.string().describe('The full name of the person.'),
     contactInfo: z.object({
-      email: z.string().email().describe('The email address of the person.'),
+      email: z.string().describe('The email address of the person.'),
       phone: z.string().describe('The phone number of the person.'),
       linkedin: z.string().optional().describe('The LinkedIn profile URL of the person, if available.'),
     }).describe('Contact information of the person.'),
@@ -94,3 +94,4 @@ const parseCvDataFlow = ai.defineFlow(
     return output!;
   }
 );
+
