@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
@@ -10,6 +11,7 @@ import type { CVData } from '@/types/cv';
 import { enhanceExperienceDescriptions } from '@/ai/flows/enhance-experience-descriptions';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { useCVData } from '@/contexts/CVDataContext';
 
 export function ExperienceSection() {
   const { control, getValues, setValue } = useFormContext<CVData>();
@@ -19,6 +21,7 @@ export function ExperienceSection() {
   });
   const { toast } = useToast();
   const [enhancingIndex, setEnhancingIndex] = useState<number | null>(null);
+  const { cvData } = useCVData(); // Get overall CV data to potentially infer language
 
   const handleEnhanceDescription = async (index: number) => {
     setEnhancingIndex(index);
@@ -29,7 +32,6 @@ export function ExperienceSection() {
       return;
     }
     
-    // Assuming description is a string of bullet points, split by newline
     const originalBulletPoints = experienceEntry.description.split('\n').map(s => s.trim()).filter(s => s.length > 0);
 
     if (originalBulletPoints.length === 0) {
@@ -38,11 +40,18 @@ export function ExperienceSection() {
       return;
     }
 
+    // Attempt to determine language. For now, we'll assume the CV parser might add a language field to cvData or individual items in future.
+    // As a fallback, we won't pass any language, and the AI will try to use the original.
+    // A more robust solution might involve language detection here or passing language from parsed data.
+    // For now, we'll pass undefined and let the flow handle it.
+    // const language = cvData?.language || undefined; // Example: if CVData had a top-level language field.
+
     try {
       const result = await enhanceExperienceDescriptions({
         jobTitle: experienceEntry.title,
         company: experienceEntry.company,
         originalDescription: originalBulletPoints,
+        // language: language, // Pass undefined if no specific language detected for this entry
       });
       setValue(`experience.${index}.description`, result.enhancedDescription.join('\n'), { shouldValidate: true, shouldDirty: true });
       toast({ title: "Description Enhanced!", description: "AI has improved your experience description." });
