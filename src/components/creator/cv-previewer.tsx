@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { Eye, Printer } from 'lucide-react';
 
 // Common styling for A4-like preview
-const a4Style = "p-8 border rounded-md shadow-lg min-h-[842px] w-[595px] mx-auto";
+const a4Style = "p-8 border rounded-md shadow-lg min-h-[842px] w-[595px] mx-auto bg-white text-gray-900";
 
 // --- TRANSLATION HELPER ---
 const translations = {
@@ -54,10 +54,10 @@ const getTranslations = (lang?: string) => {
 const ClassicTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} bg-white text-black`}>
+    <div className={`${a4Style}`}>
       {data.photo && (
         <div className="mb-4 text-center">
-          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md" data-ai-hint="professional portrait" />
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md object-cover" data-ai-hint="professional portrait" />
         </div>
       )}
       <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
@@ -105,7 +105,7 @@ const ClassicTemplate = ({ data }: { data: CVData }) => {
 const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} bg-white text-black flex gap-6`}>
+    <div className={`${a4Style} flex gap-6`}>
       <div className="flex-grow w-2/3">
         <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
         <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -148,7 +148,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
       </div>
       {data.photo && (
         <div className="w-1/3 pl-6 border-l border-gray-200">
-          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-lg shadow-md mb-4 mx-auto mt-2" data-ai-hint="professional portrait" />
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-lg shadow-md mb-4 mx-auto mt-2 object-cover" data-ai-hint="professional portrait" />
         </div>
       )}
     </div>
@@ -158,7 +158,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
 const AnonymizedTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} bg-white text-black`}>
+    <div className={`${a4Style}`}>
       <h1 className="text-3xl font-bold mb-1 text-center">{t.candidateProfile}</h1>
       <p className="text-sm text-gray-600 text-center mb-4">{t.contactUponRequest}</p>
       
@@ -201,10 +201,10 @@ const AnonymizedTemplate = ({ data }: { data: CVData }) => {
 const MarketingTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} bg-white text-black border-2 border-accent`}>
+    <div className={`${a4Style} border-2 border-accent`}>
       {data.photo && (
         <div className="mb-6 text-center">
-          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl" data-ai-hint="dynamic portrait"/>
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl object-cover" data-ai-hint="dynamic portrait"/>
         </div>
       )}
       <h1 className="text-4xl font-extrabold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
@@ -253,54 +253,48 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
 
 const FinanceTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
+  // text-primary, text-gray-600, text-blue-600, border-gray-300 are used for specific elements.
+  // These will now render based on their default Tailwind definitions on a white background.
   return (
-    <div className={`${a4Style} bg-gray-800 text-gray-100 dark`}>
-      <style jsx global>{`
-        .dark h1, .dark h2, .dark h3 { color: #E0F2F1; } /* Light Teal for headers */
-        .dark p { color: #B2DFDB; } /* Lighter Teal for text */
-        .dark .text-gray-500 { color: #80CBC4 !important; } /* Teal for dates etc */
-        .dark .text-blue-600 { color: #4DB6AC !important; } /* Teal for links */
-        .dark .border-gray-300 { border-color: #4DB6AC !important; } /* Teal for borders */
-        .dark .text-primary { color: #80CBC4 !important; } /* Override primary for dark template */
-      `}</style>
+    <div className={`${a4Style}`}>
       {data.photo && (
         <div className="mb-4 text-center">
-          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-teal-400" data-ai-hint="formal portrait"/>
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-primary object-cover" data-ai-hint="formal portrait"/>
         </div>
       )}
-      <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
-      <p className="text-sm text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+      <h1 className="text-3xl font-bold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
+      <p className="text-sm text-gray-600 text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
       
-      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.profileSummary}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
       <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.workExperience}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
       {data.experience.map((exp, index) => (
         <div key={index} className="mb-3">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
-          <p className="text-xs">{exp.dates}</p>
+          <p className="text-xs text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
             {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
           </ul>
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.education}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
       {data.education.map((edu, index) => (
         <div key={index} className="mb-3">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
-          <p className="text-xs">{edu.dates}</p>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.skills}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
       <p className="text-sm">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.languages}</h2>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
           {data.languages.map((lang, index) => (
             <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
           ))}
@@ -316,7 +310,7 @@ const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVDa
   { id: 'photoRight', name: 'Photo Right', component: PhotoRightTemplate },
   { id: 'anonymized', name: 'Anonymized', component: AnonymizedTemplate },
   { id: 'marketing', name: 'Marketing', component: MarketingTemplate },
-  { id: 'finance', name: 'Finance (Dark)', component: FinanceTemplate },
+  { id: 'finance', name: 'Finance', component: FinanceTemplate }, // Renamed from Finance (Dark)
 ];
 
 
@@ -335,9 +329,23 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     const originalContents = document.body.innerHTML;
 
     if (printContents) {
-      const originalStyles = document.body.style.cssText;
-      document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
+      const originalBodyStyles = document.body.className;
+      const originalBodyInlineStyles = document.body.style.cssText;
       
+      // Store original styles from head to reapply them later
+      const originalHeadStyles = Array.from(document.head.getElementsByTagName('style')).map(s => s.innerHTML);
+      const originalHeadLinks = Array.from(document.head.getElementsByTagName('link')).map(l => l.outerHTML);
+
+
+      document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
+      document.body.className = ''; // Clear body classes for print
+      document.body.style.cssText = ''; // Clear inline body styles for print
+      
+      // Remove existing style tags to avoid conflicts, except for print-specific ones we add
+      Array.from(document.head.getElementsByTagName('style')).forEach(s => s.remove());
+      Array.from(document.head.getElementsByTagName('link')).filter(l => l.rel === 'stylesheet').forEach(l => l.remove());
+
+
       const style = document.createElement('style');
       style.innerHTML = `
         @media print {
@@ -349,22 +357,52 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
             top: 0; 
             width: 100%;
             transform: scale(1) !important; 
+            margin: 0 !important;
+            padding: 0 !important;
           }
-          .print-container > div { 
+          .print-container > div { /* The A4 styled div */
              margin: 0 auto !important; 
              box-shadow: none !important; 
-             border: none !important; 
+             border: none !important;
+             transform: scale(1) !important; /* Ensure no scaling from previewer is printed */
           }
+           /* Re-apply essential global styles if needed, or ensure CV templates are self-contained */
+          body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
+          /* Add any other essential base styles from globals.css if they are stripped and needed */
+          .bg-white { background-color: #fff !important; }
+          .text-gray-900 { color: #1a202c !important; } 
+          /* Add more specific styles from your templates if they don't print correctly */
         }
       `;
       document.head.appendChild(style);
       
       window.print();
       
+      // Restore original content and styles
       document.body.innerHTML = originalContents;
-      document.body.style.cssText = originalStyles;
+      document.body.className = originalBodyStyles;
+      document.body.style.cssText = originalBodyInlineStyles;
+      
+      // Remove our print style
       document.head.removeChild(style);
+
+      // Restore original styles in head
+      originalHeadStyles.forEach(sContent => {
+        const restoredStyle = document.createElement('style');
+        restoredStyle.innerHTML = sContent;
+        document.head.appendChild(restoredStyle);
+      });
+      originalHeadLinks.forEach(lHTML => {
+         const tempDiv = document.createElement('div');
+         tempDiv.innerHTML = lHTML;
+         if (tempDiv.firstChild) {
+            document.head.appendChild(tempDiv.firstChild);
+         }
+      });
+
+
     } else {
+      // Fallback if printContents is not found
       window.print();
     }
   };
@@ -398,6 +436,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       <ScrollArea className="flex-grow bg-background p-2 md:p-4 rounded-md shadow-inner">
         <div id="cv-preview-area">
             {cvData && CurrentTemplate ? (
+              // The scaling is applied here for preview purposes. The print function attempts to undo this.
               <div className="transform scale-[0.80] origin-top mx-auto" style={{ width: 'calc(595px * 0.80)' }}> 
                 <CurrentTemplate data={cvData} />
               </div>
@@ -413,3 +452,4 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     </div>
   );
 }
+
