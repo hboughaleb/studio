@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
-import { Eye, Printer, Briefcase, Users, Globe, Lightbulb, Activity, Star, ShieldCheck, Bot, Landmark, FileText, MapPin, Cpu, Database, UsersRound, Trophy, BarChart3, Award, Handshake, FolderKanban } from 'lucide-react';
+import { Eye, Printer, Briefcase, Users, Globe, Lightbulb, Activity, Star, ShieldCheck, Bot, Landmark, FileText, MapPin, Cpu, Database, UsersRound, Trophy, BarChart3, Award, Handshake, FolderKanban, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';
+
 
 // Common styling for A4-like preview
 const a4Style = "p-8 border rounded-md shadow-lg min-h-[1188px] w-[840px] mx-auto bg-white text-gray-900 font-sans"; // Increased size slightly for two-column
@@ -130,7 +132,7 @@ const renderPlaceholder = (sectionName: string) => (
 const ClassicTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style}`}>
+    <div className={`${a4Style}`} id="cv-content-classic">
       {data.photo && (
         <div className="mb-4 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md object-cover" data-ai-hint="professional portrait" />
@@ -181,7 +183,7 @@ const ClassicTemplate = ({ data }: { data: CVData }) => {
 const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} flex gap-6`}>
+    <div className={`${a4Style} flex gap-6`} id="cv-content-photoright">
       <div className="flex-grow w-2/3 cv-item-block">
         <h1 className="text-3xl font-bold mb-2 cv-item-block">{data.personalInfo.name}</h1>
         <p className="text-sm text-gray-600 mb-1 cv-item-block">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -234,7 +236,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
 const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style}`}>
+    <div className={`${a4Style}`} id="cv-content-anonymized">
       <h1 className="text-3xl font-bold mb-1 text-center text-primary cv-item-block">{t.candidateProfile}</h1>
       <p className="text-sm text-gray-600 text-center mb-6 cv-item-block">{t.contactUponRequest}</p>
       
@@ -278,7 +280,7 @@ const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
 const MarketingTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} border-2 border-accent bg-white text-gray-900`}>
+    <div className={`${a4Style} border-2 border-accent bg-white text-gray-900`} id="cv-content-marketing">
       {data.photo && (
         <div className="mb-6 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl object-cover" data-ai-hint="dynamic portrait"/>
@@ -331,7 +333,7 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
 const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-finance">
       <div className="text-center mb-6 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-gray-700 object-cover mb-3" data-ai-hint="corporate headshot"/>
@@ -398,7 +400,7 @@ const SectionTitle = ({ title, icon, className }: { title: string; icon?: React.
 const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} grid grid-cols-3 gap-x-6 bg-white text-gray-900`}>
+    <div className={`${a4Style} grid grid-cols-3 gap-x-6 bg-white text-gray-900`} id="cv-content-datadriven">
       <div className="col-span-1 border-r pr-6 border-gray-200 cv-item-block"> {/* Left Column */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-full mx-auto shadow-md object-cover mb-4" data-ai-hint="professional portrait" />
@@ -460,7 +462,7 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
 const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} flex bg-white text-gray-900`}>
+    <div className={`${a4Style} flex bg-white text-gray-900`} id="cv-content-automation">
       <div className="w-1/4 bg-accent text-accent-foreground p-6 rounded-l-md cv-item-block"> {/* Dark Sidebar */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto shadow-md object-cover mb-4 border-2 border-white" data-ai-hint="modern portrait" />
@@ -533,7 +535,7 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
 const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-leadership">
       <div className="flex justify-between items-start mb-6 cv-item-block">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
@@ -607,7 +609,7 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
   };
 
   return (
-    <div className={`${a4Style} bg-white text-gray-900`}>
+    <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-international">
       <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary cv-item-block">
         <div>
           <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
@@ -675,7 +677,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
   const sectionContentStyle = "p-4 border border-t-0 border-primary rounded-b-md mb-4 cv-item-block";
 
   return (
-    <div className={`${a4Style} bg-white text-gray-900`}>
+    <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-techstartups">
       <div className="text-center mb-8 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto ring-4 ring-accent p-1 object-cover" data-ai-hint="dynamic portrait" />
@@ -760,7 +762,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
   const tightSpacingStyle = "mb-2"; // Tighter spacing for sections
 
   return (
-    <div className={`${a4Style} ${smallTextStyle} bg-white text-gray-900`}>
+    <div className={`${a4Style} ${smallTextStyle} bg-white text-gray-900`} id="cv-content-researcher">
       {data.photo && (
         <div className="mb-3 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full mx-auto shadow-sm object-cover" data-ai-hint="focused headshot" />
@@ -831,7 +833,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
 const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} bg-white text-gray-900`}>
+    <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-performance">
       <div className="text-center mb-6 pb-4 border-b-2 border-primary cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-lg object-cover mb-3 border-2 border-primary" data-ai-hint="results-oriented portrait" />
@@ -907,7 +909,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
 const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-boutique">
       <div className="text-center mb-8 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={110} height={110} className="rounded-full mx-auto shadow-md object-cover border-2 border-gray-300 p-0.5" data-ai-hint="elegant portrait" />
@@ -980,20 +982,20 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
 };
 
 
-const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVData}> }[] = [
-  { id: 'classic', name: 'Classic', component: ClassicTemplate },
-  { id: 'photoRight', name: 'Photo Right', component: PhotoRightTemplate },
-  { id: 'marketing', name: 'Marketing', component: MarketingTemplate },
-  { id: 'anonymizedConfidential', name: 'Anonymized', component: AnonymizedConfidentialTemplate },
-  { id: 'financePrivateEquity', name: 'Finance/PE', component: FinancePrivateEquityTemplate },
-  { id: 'dataDrivenExecutive', name: 'Data-Driven Exec.', component: DataDrivenExecutiveTemplate },
-  { id: 'automationSpecialist', name: 'Automation Spec.', component: AutomationSpecialistTemplate },
-  { id: 'leadershipAdvisory', name: 'Leadership/Advisory', component: LeadershipAdvisoryTemplate },
-  { id: 'internationalHeadhunter', name: 'Intl. Headhunter', component: InternationalHeadhunterTemplate },
-  { id: 'techStartupsFocus', name: 'Tech/Startups', component: TechStartupsFocusTemplate },
-  { id: 'searchResearcherAnalyst', name: 'Researcher/Analyst', component: SearchResearcherAnalystTemplate },
-  { id: 'performanceOptimizedConsultant', name: 'Performance Opt.', component: PerformanceOptimizedConsultantTemplate },
-  { id: 'classicBoutiqueSearch', name: 'Classic Boutique', component: ClassicBoutiqueSearchTemplate },
+const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVData}>, contentId: string }[] = [
+  { id: 'classic', name: 'Classic', component: ClassicTemplate, contentId: 'cv-content-classic' },
+  { id: 'photoRight', name: 'Photo Right', component: PhotoRightTemplate, contentId: 'cv-content-photoright' },
+  { id: 'marketing', name: 'Marketing', component: MarketingTemplate, contentId: 'cv-content-marketing' },
+  { id: 'anonymizedConfidential', name: 'Anonymized', component: AnonymizedConfidentialTemplate, contentId: 'cv-content-anonymized' },
+  { id: 'financePrivateEquity', name: 'Finance/PE', component: FinancePrivateEquityTemplate, contentId: 'cv-content-finance' },
+  { id: 'dataDrivenExecutive', name: 'Data-Driven Exec.', component: DataDrivenExecutiveTemplate, contentId: 'cv-content-datadriven' },
+  { id: 'automationSpecialist', name: 'Automation Spec.', component: AutomationSpecialistTemplate, contentId: 'cv-content-automation' },
+  { id: 'leadershipAdvisory', name: 'Leadership/Advisory', component: LeadershipAdvisoryTemplate, contentId: 'cv-content-leadership' },
+  { id: 'internationalHeadhunter', name: 'Intl. Headhunter', component: InternationalHeadhunterTemplate, contentId: 'cv-content-international' },
+  { id: 'techStartupsFocus', name: 'Tech/Startups', component: TechStartupsFocusTemplate, contentId: 'cv-content-techstartups' },
+  { id: 'searchResearcherAnalyst', name: 'Researcher/Analyst', component: SearchResearcherAnalystTemplate, contentId: 'cv-content-researcher' },
+  { id: 'performanceOptimizedConsultant', name: 'Performance Opt.', component: PerformanceOptimizedConsultantTemplate, contentId: 'cv-content-performance' },
+  { id: 'classicBoutiqueSearch', name: 'Classic Boutique', component: ClassicBoutiqueSearchTemplate, contentId: 'cv-content-boutique' },
 ];
 
 
@@ -1005,76 +1007,31 @@ interface CVPreviewerProps {
 export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreviewerProps) {
   const { cvData } = useCVData();
 
-  const CurrentTemplate = templates.find(t => t.id === selectedTemplate)?.component;
+  const currentTemplateMeta = templates.find(t => t.id === selectedTemplate);
+  const CurrentTemplateComponent = currentTemplateMeta?.component;
+  const currentContentId = currentTemplateMeta?.contentId || 'cv-content-default';
 
-  const handlePrint = () => {
-    const printContents = document.getElementById('cv-preview-area')?.innerHTML;
-    
-    if (printContents) {
-      const printWindow = window.open('', '_blank', 'height=800,width=1000');
-      if (!printWindow) {
-        alert("Please allow popups for this website to print the CV.");
-        return;
-      }
 
-      printWindow.document.write('<html><head><title>Print CV</title>');
-      
-      Array.from(document.styleSheets).forEach(styleSheet => {
-        try {
-          const cssRules = styleSheet.cssRules ? Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('\n') : '';
-          if (cssRules) {
-            const styleElement = printWindow.document.createElement('style');
-            styleElement.appendChild(printWindow.document.createTextNode(cssRules));
-            printWindow.document.head.appendChild(styleElement);
-          }
-        } catch (e) {
-          if (styleSheet.href) {
-            const linkElement = printWindow.document.createElement('link');
-            linkElement.rel = 'stylesheet';
-            linkElement.type = styleSheet.type;
-            linkElement.href = styleSheet.href;
-            printWindow.document.head.appendChild(linkElement);
-          }
-        }
-      });
-      
-       const printSpecificStyle = printWindow.document.createElement('style');
-       printSpecificStyle.innerHTML = `
-         @media print {
-           body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-           .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; transform: scale(1) !important; box-shadow: none !important; border: none !important; }
-           .print-container > div { /* Targets the scaled div */
-             margin: 0 auto !important; 
-             box-shadow: none !important; 
-             border: none !important;
-             transform: none !important; /* Ensure scale is reset for print */
-           }
-           .print-container > div > div { /* Targets the actual A4 styled div inside scaled div */
-              /* Add any specific A4 page print styles if needed, but usually handled by a4Style */
-           }
-           .cv-item-block {
-             page-break-inside: avoid !important;
-           }
-           .bg-white { background-color: #fff !important; }
-           .text-gray-900 { color: #1a202c !important; } 
-           /* Add other explicit color classes if needed */
-         }
-       `;
-       printWindow.document.head.appendChild(printSpecificStyle);
-      
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(`<div class="print-container">${printContents}</div>`);
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      
-      setTimeout(() => {
-        printWindow.focus();
-        printWindow.print();
-      }, 500); 
-
-    } else {
-      alert("Could not find CV content to print.");
+  const handleDownloadPdf = () => {
+    const element = document.getElementById(currentContentId);
+    if (!element) {
+      alert("Could not find CV content to download.");
+      return;
     }
+
+    const opt = {
+      margin:       [0.5, 0.5, 0.5, 0.5], // inches [top, left, bottom, right]
+      filename:     cvData?.fileName ? cvData.fileName.replace(/\.[^/.]+$/, "") + '.pdf' : 'ResuAI-CV.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false }, // Increased scale for better quality
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Try to avoid breaking elements
+    };
+
+    // html2pdf.js can work with the unscaled element for better quality
+    // If the element is scaled in the view, we might need to temporarily unscale or provide html2canvas options.
+    // However, html2pdf usually tries to handle this.
+    html2pdf().from(element).set(opt).save();
   };
 
 
@@ -1083,7 +1040,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       <Card className="mb-4 shadow-none border-0 bg-transparent">
         <CardHeader className="p-2 md:p-4">
           <CardTitle className="text-xl md:text-2xl text-primary">CV Preview & Templates</CardTitle>
-          <CardDescription>Select a template to preview your CV. Use "Print / Export to PDF" to save.</CardDescription>
+          <CardDescription>Select a template to preview your CV. Use "Download PDF" to save.</CardDescription>
         </CardHeader>
         <CardContent className="p-2 md:p-4">
           <div className="flex flex-wrap gap-2 mb-4">
@@ -1098,17 +1055,17 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
               </Button>
             ))}
           </div>
-           <Button onClick={handlePrint} variant="secondary" className="w-full">
-            <Printer className="mr-2 h-4 w-4" /> Print / Export to PDF
+           <Button onClick={handleDownloadPdf} variant="secondary" className="w-full">
+            <Download className="mr-2 h-4 w-4" /> Download PDF
           </Button>
         </CardContent>
       </Card>
       
-      <ScrollArea className="flex-grow bg-background rounded-md shadow-inner">
-        <div id="cv-preview-area" className="flex justify-center items-start py-4">
-            {cvData && CurrentTemplate ? (
+      <ScrollArea className="flex-grow bg-background rounded-md shadow-inner py-4">
+        <div id="cv-preview-area" className="flex justify-center items-start">
+            {cvData && CurrentTemplateComponent ? (
               <div className="transform scale-[0.70] origin-top"> 
-                <CurrentTemplate data={cvData} />
+                <CurrentTemplateComponent data={cvData} />
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-8 text-center min-h-[400px]">
