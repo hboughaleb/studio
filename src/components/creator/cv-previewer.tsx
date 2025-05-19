@@ -132,20 +132,20 @@ const ClassicTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style}`}>
       {data.photo && (
-        <div className="mb-4 text-center">
+        <div className="mb-4 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md object-cover" data-ai-hint="professional portrait" />
         </div>
       )}
-      <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
-      <p className="text-sm text-gray-600 text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+      <h1 className="text-3xl font-bold mb-1 text-center cv-item-block">{data.personalInfo.name}</h1>
+      <p className="text-sm text-gray-600 text-center mb-1 cv-item-block">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4 cv-item-block">{data.personalInfo.contactInfo.linkedin}</p>}
       
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
-      <p className="text-sm whitespace-pre-line">{data.profile}</p>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.profileSummary}</h2>
+      <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.workExperience}</h2>
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
@@ -154,23 +154,23 @@ const ClassicTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.education}</h2>
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
-      <p className="text-sm">{data.skills.join(', ')}</p>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.skills}</h2>
+      <p className="text-sm cv-item-block">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -183,16 +183,16 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} flex gap-6`}>
       <div className="flex-grow w-2/3">
-        <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
-        <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-        {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+        <h1 className="text-3xl font-bold mb-2 cv-item-block">{data.personalInfo.name}</h1>
+        <p className="text-sm text-gray-600 mb-1 cv-item-block">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4 cv-item-block">{data.personalInfo.contactInfo.linkedin}</p>}
       
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
-        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.profileSummary}</h2>
+        <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.workExperience}</h2>
         {data.experience.map((exp, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="mb-3 cv-item-block">
             <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
             <p className="text-xs text-gray-500">{exp.dates}</p>
             <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
@@ -201,29 +201,29 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
           </div>
         ))}
 
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.education}</h2>
         {data.education.map((edu, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="mb-3 cv-item-block">
             <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
             <p className="text-xs text-gray-500">{edu.dates}</p>
             {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
           </div>
         ))}
 
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
-        <p className="text-sm">{data.skills.join(', ')}</p>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.skills}</h2>
+        <p className="text-sm cv-item-block">{data.skills.join(', ')}</p>
 
         {data.languages && data.languages.length > 0 && (
           <>
-            <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+            <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary cv-item-block">{t.languages}</h2>
             {data.languages.map((lang, index) => (
-              <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+              <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
             ))}
           </>
         )}
       </div>
       {data.photo && (
-        <div className="w-1/3 pl-6 border-l border-gray-200">
+        <div className="w-1/3 pl-6 border-l border-gray-200 cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-lg shadow-md mb-4 mx-auto mt-2 object-cover" data-ai-hint="professional portrait" />
         </div>
       )}
@@ -235,15 +235,15 @@ const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style}`}>
-      <h1 className="text-3xl font-bold mb-1 text-center text-primary">{t.candidateProfile}</h1>
-      <p className="text-sm text-gray-600 text-center mb-6">{t.contactUponRequest}</p>
+      <h1 className="text-3xl font-bold mb-1 text-center text-primary cv-item-block">{t.candidateProfile}</h1>
+      <p className="text-sm text-gray-600 text-center mb-6 cv-item-block">{t.contactUponRequest}</p>
       
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.profileSummary}</h2>
-      <p className="text-sm whitespace-pre-line">{data.profile}</p>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700 cv-item-block">{t.profileSummary}</h2>
+      <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.workExperience}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700 cv-item-block">{t.workExperience}</h2>
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           {/* Company name might be replaced by industry by user, template just displays it */}
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
@@ -252,22 +252,22 @@ const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
           </ul>
         </div>
       ))}
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.education}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700 cv-item-block">{t.education}</h2>
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.skills}</h2>
-      <p className="text-sm">{data.skills.join(', ')}</p>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700 cv-item-block">{t.skills}</h2>
+      <p className="text-sm cv-item-block">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.languages}</h2>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700 cv-item-block">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -280,20 +280,20 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} border-2 border-accent bg-white text-gray-900`}>
       {data.photo && (
-        <div className="mb-6 text-center">
+        <div className="mb-6 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl object-cover" data-ai-hint="dynamic portrait"/>
         </div>
       )}
-      <h1 className="text-4xl font-extrabold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
-      <p className="text-md text-accent text-center font-semibold mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-      {data.personalInfo.contactInfo.linkedin && <p className="text-md text-blue-500 text-center mb-6 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
+      <h1 className="text-4xl font-extrabold mb-1 text-center text-primary cv-item-block">{data.personalInfo.name}</h1>
+      <p className="text-md text-accent text-center font-semibold mb-1 cv-item-block">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-md text-blue-500 text-center mb-6 hover:underline cv-item-block">{data.personalInfo.contactInfo.linkedin}</p>}
       
-      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.keyAchievementsProfile}</h2>
-      <p className="text-md whitespace-pre-line italic">{data.profile}</p>
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent cv-item-block">{t.keyAchievementsProfile}</h2>
+      <p className="text-md whitespace-pre-line italic cv-item-block">{data.profile}</p>
 
-      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.professionalJourney}</h2>
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent cv-item-block">{t.professionalJourney}</h2>
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4 p-3 bg-secondary/30 rounded-lg">
+        <div key={index} className="mb-4 p-3 bg-secondary/30 rounded-lg cv-item-block">
           <h3 className="text-lg font-bold text-primary">{exp.title}</h3>
           <p className="text-sm font-semibold text-accent-foreground/80">{exp.company} | {exp.dates}</p>
           <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 mt-1">
@@ -302,14 +302,14 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
 
-      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.skillsSnapshot}</h2>
-      <div className="flex flex-wrap gap-2 mb-4">
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent cv-item-block">{t.skillsSnapshot}</h2>
+      <div className="flex flex-wrap gap-2 mb-4 cv-item-block">
           {data.skills.map((skill, index) => <span key={`${skill}-${index}`} className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium shadow-md">{skill}</span>)}
       </div>
 
-      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.educationCredentials}</h2>
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent cv-item-block">{t.educationCredentials}</h2>
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-lg font-semibold">{edu.degree}</h3>
           <p className="text-md text-gray-700">{edu.institution} ({edu.dates})</p>
           {edu.description && <p className="text-sm whitespace-pre-line text-gray-600">{edu.description}</p>}
@@ -318,9 +318,9 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
       
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.languages}</h2>
+          <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent cv-item-block">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md">{lang.language}: <span className="font-semibold">{getTranslatedProficiency(lang.proficiency, t)}</span></p>
+            <p key={index} className="text-md cv-item-block">{lang.language}: <span className="font-semibold">{getTranslatedProficiency(lang.proficiency, t)}</span></p>
           ))}
         </>
       )}
@@ -332,7 +332,7 @@ const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`}>
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-gray-700 object-cover mb-3" data-ai-hint="corporate headshot"/>
         )}
@@ -341,12 +341,12 @@ const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
         {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-700 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
       </div>
       
-      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
-      <p className="text-sm whitespace-pre-line text-gray-700 mb-6">{data.profile}</p>
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm whitespace-pre-line text-gray-700 mb-6 cv-item-block">{data.profile}</p>
 
-      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4 relative pl-8 before:absolute before:left-3 before:top-1 before:bottom-1 before:w-0.5 before:bg-gray-300">
+        <div key={index} className="mb-4 relative pl-8 before:absolute before:left-3 before:top-1 before:bottom-1 before:w-0.5 before:bg-gray-300 cv-item-block">
            <div className="absolute left-0 top-1.5 w-6 h-6 bg-primary rounded-full border-2 border-white flex items-center justify-center text-white text-xs">{index+1}</div>
           <h3 className="text-md font-semibold text-gray-800">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500 mb-1">{exp.dates}</p>
@@ -356,31 +356,31 @@ const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
 
-      <SectionTitle title={t.portfolioImpact} icon={<Landmark className="inline-block mr-2"/>} />
+      <SectionTitle title={t.portfolioImpact} icon={<Landmark className="inline-block mr-2"/>} className="cv-item-block" />
       {data.portfolioImpact && data.portfolioImpact.length > 0 ? (
          data.portfolioImpact.map((item, idx) => (
-          <div key={idx} className="mb-2 text-sm text-gray-700"><strong>{item.title}:</strong> {item.description}</div>
+          <div key={idx} className="mb-2 text-sm text-gray-700 cv-item-block"><strong>{item.title}:</strong> {item.description}</div>
          ))
-      ) : renderPlaceholder(t.portfolioImpact)}
+      ) : <div className="cv-item-block">{renderPlaceholder(t.portfolioImpact)}</div>}
 
 
-      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3 text-gray-700">
+        <div key={index} className="mb-3 text-gray-700 cv-item-block">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
 
-      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
-      <p className="text-sm text-gray-700 mb-6">{data.skills.join(', ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm text-gray-700 mb-6 cv-item-block">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="cv-item-block" />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm text-gray-700">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-sm text-gray-700 cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -399,7 +399,7 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} grid grid-cols-3 gap-x-6 bg-white text-gray-900`}>
-      <div className="col-span-1 border-r pr-6 border-gray-200"> {/* Left Column */}
+      <div className="col-span-1 border-r pr-6 border-gray-200 cv-item-block"> {/* Left Column */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-full mx-auto shadow-md object-cover mb-4" data-ai-hint="professional portrait" />
         )}
@@ -426,12 +426,12 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
       </div>
 
       <div className="col-span-2"> {/* Right Column */}
-        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0" />
-        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0 cv-item-block" />
+        <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
-        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
         {data.experience.map((exp, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-4 cv-item-block">
             <h3 className="text-md font-semibold">{exp.title} at {exp.company}</h3>
             <p className="text-xs text-gray-500">{exp.dates}</p>
             <p className="text-sm whitespace-pre-line mt-1 italic text-primary">KPIs: {renderPlaceholder("KPIs from description")}</p>
@@ -441,12 +441,12 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
           </div>
         ))}
 
-        <SectionTitle title={t.analyticsReporting} icon={<BarChart3 className="inline-block mr-2"/>} />
-        {renderPlaceholder(t.analyticsReporting)}
+        <SectionTitle title={t.analyticsReporting} icon={<BarChart3 className="inline-block mr-2"/>} className="cv-item-block" />
+        <div className="cv-item-block">{renderPlaceholder(t.analyticsReporting)}</div>
 
-        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
         {data.education.map((edu, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="mb-3 cv-item-block">
             <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
             <p className="text-xs text-gray-500">{edu.dates}</p>
             {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
@@ -461,7 +461,7 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} flex bg-white text-gray-900`}>
-      <div className="w-1/4 bg-accent text-accent-foreground p-6 rounded-l-md"> {/* Dark Sidebar */}
+      <div className="w-1/4 bg-accent text-accent-foreground p-6 rounded-l-md cv-item-block"> {/* Dark Sidebar */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto shadow-md object-cover mb-4 border-2 border-white" data-ai-hint="modern portrait" />
         )}
@@ -491,12 +491,12 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
       </div>
 
       <div className="w-3/4 p-6"> {/* Main Content */}
-        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0" />
-        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0 cv-item-block" />
+        <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
-        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
         {data.experience.map((exp, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-4 cv-item-block">
             <h3 className="text-md font-semibold flex items-center">
               <Bot size={18} className="mr-2 text-primary"/> {exp.title} at {exp.company}
             </h3>
@@ -508,19 +508,19 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
           </div>
         ))}
         
-        <SectionTitle title={t.automatedProcesses} icon={<FolderKanban className="inline-block mr-2"/>} />
+        <SectionTitle title={t.automatedProcesses} icon={<FolderKanban className="inline-block mr-2"/>} className="cv-item-block" />
         {data.automatedProcessesImplemented && data.automatedProcessesImplemented.length > 0 ? (
           data.automatedProcessesImplemented.map((process, idx) => (
-            <div key={idx} className="mb-2 text-sm">
+            <div key={idx} className="mb-2 text-sm cv-item-block">
               <strong>{process.title}:</strong> {process.description}
               {process.toolsUsed && process.toolsUsed.length > 0 && <p className="text-xs text-gray-500">Tools: {process.toolsUsed.join(', ')}</p>}
             </div>
           ))
-        ) : renderPlaceholder(t.automatedProcesses)}
+        ) : <div className="cv-item-block">{renderPlaceholder(t.automatedProcesses)}</div>}
 
-        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
         {data.education.map((edu, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="mb-3 cv-item-block">
             <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
             <p className="text-xs text-gray-500">{edu.dates}</p>
           </div>
@@ -534,7 +534,7 @@ const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`}>
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-6 cv-item-block">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -545,14 +545,14 @@ const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
         )}
       </div>
       
-      <div className="text-center my-8">
+      <div className="text-center my-8 cv-item-block">
         <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="text-center border-none text-2xl" />
         <p className="text-md whitespace-pre-line text-gray-700 max-w-2xl mx-auto">{data.profile}</p>
       </div>
 
-      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-4 cv-item-block">
           <h3 className="text-lg font-semibold text-gray-800">{exp.title} at {exp.company}</h3>
           <p className="text-sm text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 text-gray-700">
@@ -561,33 +561,33 @@ const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
       
-      <SectionTitle title={t.advisoryProjects} icon={<Handshake className="inline-block mr-2"/>} />
+      <SectionTitle title={t.advisoryProjects} icon={<Handshake className="inline-block mr-2"/>} className="cv-item-block" />
        {data.advisoryProjects && data.advisoryProjects.length > 0 ? (
           data.advisoryProjects.map((project, idx) => (
-            <div key={idx} className="mb-2 text-sm"><strong>{project.title}:</strong> {project.description}</div>
+            <div key={idx} className="mb-2 text-sm cv-item-block"><strong>{project.title}:</strong> {project.description}</div>
           ))
-        ) : renderPlaceholder(t.advisoryProjects)}
+        ) : <div className="cv-item-block">{renderPlaceholder(t.advisoryProjects)}</div>}
 
 
-      <SectionTitle title={t.boardExperience} icon={<UsersRound className="inline-block mr-2"/>} />
-      {data.boardExperience ? <p className="text-sm text-gray-700">{data.boardExperience}</p> : renderPlaceholder(t.boardExperience)}
+      <SectionTitle title={t.boardExperience} icon={<UsersRound className="inline-block mr-2"/>} className="cv-item-block" />
+      {data.boardExperience ? <p className="text-sm text-gray-700 cv-item-block">{data.boardExperience}</p> : <div className="cv-item-block">{renderPlaceholder(t.boardExperience)}</div>}
 
-      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3 text-gray-700">
+        <div key={index} className="mb-3 text-gray-700 cv-item-block">
           <h3 className="text-lg font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-sm text-gray-500">{edu.dates}</p>
         </div>
       ))}
 
-      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
-      <p className="text-md text-gray-700 mb-6">{data.skills.join(' • ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-md text-gray-700 mb-6 cv-item-block">{data.skills.join(' • ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="cv-item-block" />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md text-gray-700">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-md text-gray-700 cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -608,7 +608,7 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
 
   return (
     <div className={`${a4Style} bg-white text-gray-900`}>
-      <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary">
+      <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary cv-item-block">
         <div>
           <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -619,10 +619,10 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
         )}
       </div>
       
-      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
-      <p className="text-sm whitespace-pre-line mb-6">{data.profile}</p>
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm whitespace-pre-line mb-6 cv-item-block">{data.profile}</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 cv-item-block">
         <div>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages && data.languages.map((lang, index) => (
@@ -639,10 +639,10 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
         </div>
       </div>
       
-      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
       {/* User can differentiate Global vs Local in description. Template shows all. */}
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4 p-3 border rounded-md hover:shadow-sm">
+        <div key={index} className="mb-4 p-3 border rounded-md hover:shadow-sm cv-item-block">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
@@ -651,32 +651,32 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
       
-      <SectionTitle title={t.deiAndCulturalFit} icon={<Users className="inline-block mr-2"/>} />
-      {renderPlaceholder(t.deiAndCulturalFit + " (mention in Profile or Experience)")}
+      <SectionTitle title={t.deiAndCulturalFit} icon={<Users className="inline-block mr-2"/>} className="cv-item-block" />
+      <div className="cv-item-block">{renderPlaceholder(t.deiAndCulturalFit + " (mention in Profile or Experience)")}</div>
 
 
-      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
         </div>
       ))}
 
-      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
-      <p className="text-sm mb-6">{data.skills.join(', ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm mb-6 cv-item-block">{data.skills.join(', ')}</p>
     </div>
   );
 };
 
 const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
-  const sectionHeaderStyle = "text-2xl font-bold text-white bg-primary p-2 rounded-t-md mt-8 mb-0 flex items-center";
-  const sectionContentStyle = "p-4 border border-t-0 border-primary rounded-b-md mb-4";
+  const sectionHeaderStyle = "text-2xl font-bold text-white bg-primary p-2 rounded-t-md mt-8 mb-0 flex items-center cv-item-block";
+  const sectionContentStyle = "p-4 border border-t-0 border-primary rounded-b-md mb-4 cv-item-block";
 
   return (
     <div className={`${a4Style} bg-white text-gray-900`}>
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto ring-4 ring-accent p-1 object-cover" data-ai-hint="dynamic portrait" />
         )}
@@ -693,7 +693,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
       <h2 className={sectionHeaderStyle}><Briefcase size={24} className="mr-2"/>{t.workExperience}</h2>
       <div className={sectionContentStyle}>
         {data.experience.map((exp, index) => (
-          <div key={index} className="mb-4 last:mb-0">
+          <div key={index} className="mb-4 last:mb-0 cv-item-block">
             <h3 className="text-md font-semibold text-primary">{exp.title} <span className="font-normal text-gray-700">at</span> {exp.company}</h3>
             <p className="text-xs text-gray-500">{exp.dates}</p>
             <p className="text-xs mt-1 text-accent">Impact: {renderPlaceholder("Fundraising/Growth from description")}</p>
@@ -728,7 +728,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
       <h2 className={sectionHeaderStyle}><Award size={24} className="mr-2"/>{t.education}</h2>
       <div className={sectionContentStyle}>
         {data.education.map((edu, index) => (
-          <div key={index} className="mb-3 last:mb-0">
+          <div key={index} className="mb-3 last:mb-0 cv-item-block">
             <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
             <p className="text-xs text-gray-500">{edu.dates}</p>
           </div>
@@ -745,7 +745,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
           <h2 className={sectionHeaderStyle}><Globe size={24} className="mr-2"/>{t.languages}</h2>
           <div className={sectionContentStyle}>
             {data.languages.map((lang, index) => (
-              <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+              <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
             ))}
           </div>
         </>
@@ -762,33 +762,33 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} ${smallTextStyle} bg-white text-gray-900`}>
       {data.photo && (
-        <div className="mb-3 text-center">
+        <div className="mb-3 text-center cv-item-block">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full mx-auto shadow-sm object-cover" data-ai-hint="focused headshot" />
         </div>
       )}
-      <h1 className="text-2xl font-semibold text-center mb-0.5">{data.personalInfo.name}</h1>
-      <p className={`${smallTextStyle} text-gray-500 text-center ${tightSpacingStyle}`}>{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}
+      <h1 className="text-2xl font-semibold text-center mb-0.5 cv-item-block">{data.personalInfo.name}</h1>
+      <p className={`${smallTextStyle} text-gray-500 text-center ${tightSpacingStyle} cv-item-block`}>{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}
         {data.personalInfo.contactInfo.linkedin && <span className="block">{data.personalInfo.contactInfo.linkedin}</span>}
       </p>
       
-      <SectionTitle title={t.profileSummary} className={`mt-3 ${tightSpacingStyle} text-lg`} />
-      <p className={`${smallTextStyle} whitespace-pre-line ${tightSpacingStyle}`}>{data.profile}</p>
+      <SectionTitle title={t.profileSummary} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
+      <p className={`${smallTextStyle} whitespace-pre-line ${tightSpacingStyle} cv-item-block`}>{data.profile}</p>
 
-      <SectionTitle title={t.researchMethodologies} icon={<Lightbulb className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <SectionTitle title={t.researchMethodologies} icon={<Lightbulb className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
       {data.researchMethodologies && data.researchMethodologies.length > 0 ? 
-        <ul className={`list-disc list-inside ${smallTextStyle} pl-3 ${tightSpacingStyle}`}>
+        <ul className={`list-disc list-inside ${smallTextStyle} pl-3 ${tightSpacingStyle} cv-item-block`}>
           {data.researchMethodologies.map((method, idx) => <li key={idx}>{method}</li>)}
         </ul>
-      : renderPlaceholder(t.researchMethodologies)}
+      : <div className="cv-item-block">{renderPlaceholder(t.researchMethodologies)}</div>}
 
-      <SectionTitle title={t.mappingTools} icon={<MapPin className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <SectionTitle title={t.mappingTools} icon={<MapPin className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
        {data.mappingTools && data.mappingTools.length > 0 ? 
-        <p className={`${smallTextStyle} ${tightSpacingStyle}`}>{data.mappingTools.join(', ')}</p>
-      : renderPlaceholder(t.mappingTools)}
+        <p className={`${smallTextStyle} ${tightSpacingStyle} cv-item-block`}>{data.mappingTools.join(', ')}</p>
+      : <div className="cv-item-block">{renderPlaceholder(t.mappingTools)}</div>}
 
-      <SectionTitle title={t.workExperience} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <SectionTitle title={t.workExperience} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
       {data.experience.map((exp, index) => (
-        <div key={index} className={`${tightSpacingStyle}`}>
+        <div key={index} className={`${tightSpacingStyle} cv-item-block`}>
           <h3 className="text-sm font-medium">{exp.title} at {exp.company}</h3>
           <p className="text-xs text-gray-400">{exp.dates}</p>
           <ul className={`list-disc list-inside ${smallTextStyle} whitespace-pre-line pl-3`}>
@@ -797,30 +797,30 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
       
-      <SectionTitle title={t.publicationsProjects} icon={<FileText className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <SectionTitle title={t.publicationsProjects} icon={<FileText className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
       {data.publicationsProjects && data.publicationsProjects.length > 0 ? (
         data.publicationsProjects.map((item, idx) => (
-          <div key={idx} className={`${smallTextStyle} ${tightSpacingStyle}`}><strong>{item.title}:</strong> {item.description}</div>
+          <div key={idx} className={`${smallTextStyle} ${tightSpacingStyle} cv-item-block`}><strong>{item.title}:</strong> {item.description}</div>
         ))
-      ) : renderPlaceholder(t.publicationsProjects)}
+      ) : <div className="cv-item-block">{renderPlaceholder(t.publicationsProjects)}</div>}
 
-      <SectionTitle title={t.education} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <SectionTitle title={t.education} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
       {data.education.map((edu, index) => (
-        <div key={index} className={`${tightSpacingStyle}`}>
+        <div key={index} className={`${tightSpacingStyle} cv-item-block`}>
           <h3 className="text-sm font-medium">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-400">{edu.dates}</p>
           {edu.description && <p className={`${smallTextStyle} whitespace-pre-line`}>{edu.description}</p>}
         </div>
       ))}
 
-      <SectionTitle title={t.skills} className={`mt-3 ${tightSpacingStyle} text-lg`} />
-      <p className={`${smallTextStyle} ${tightSpacingStyle}`}>{data.skills.join(', ')}</p>
+      <SectionTitle title={t.skills} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
+      <p className={`${smallTextStyle} ${tightSpacingStyle} cv-item-block`}>{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <SectionTitle title={t.languages} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+          <SectionTitle title={t.languages} className={`mt-3 ${tightSpacingStyle} text-lg cv-item-block`} />
           {data.languages.map((lang, index) => (
-            <p key={index} className={`${smallTextStyle}`}>{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className={`${smallTextStyle} cv-item-block`}>{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -832,7 +832,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} bg-white text-gray-900`}>
-      <div className="text-center mb-6 pb-4 border-b-2 border-primary">
+      <div className="text-center mb-6 pb-4 border-b-2 border-primary cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-lg object-cover mb-3 border-2 border-primary" data-ai-hint="results-oriented portrait" />
         )}
@@ -841,13 +841,13 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
         {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-sm text-blue-600 hover:underline">LinkedIn Profile</a>}
       </div>
 
-      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
-      <p className="text-sm whitespace-pre-line mb-6">{data.profile}</p>
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm whitespace-pre-line mb-6 cv-item-block">{data.profile}</p>
 
-      <SectionTitle title={t.performanceHighlights} icon={<Trophy className="inline-block mr-2"/>} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <SectionTitle title={t.performanceHighlights} icon={<Trophy className="inline-block mr-2"/>} className="cv-item-block" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 cv-item-block">
         {data.keyMetrics && data.keyMetrics.length > 0 ? data.keyMetrics.map((km, idx) => (
-          <div key={idx} className="p-3 border rounded-md bg-gray-50">
+          <div key={idx} className="p-3 border rounded-md bg-gray-50 cv-item-block">
             <p className="font-semibold text-primary">{km.metric}</p>
             {km.visual === 'progress' && typeof km.value === 'number' ? (
               <Progress value={km.value} className="h-3 my-1" />
@@ -857,17 +857,17 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
           </div>
         )) : (
           <>
-          <div className="p-3 border rounded-md bg-gray-50">{renderPlaceholder("Time-to-Hire Metric")} <Progress value={75} className="h-3 my-1" /></div>
-          <div className="p-3 border rounded-md bg-gray-50">{renderPlaceholder("Retention Rate Metric")} <p className="text-2xl font-bold text-accent">95%</p></div>
+          <div className="p-3 border rounded-md bg-gray-50 cv-item-block">{renderPlaceholder("Time-to-Hire Metric")} <Progress value={75} className="h-3 my-1" /></div>
+          <div className="p-3 border rounded-md bg-gray-50 cv-item-block">{renderPlaceholder("Retention Rate Metric")} <p className="text-2xl font-bold text-accent">95%</p></div>
           </>
         )}
       </div>
-       <p className="text-xs text-gray-400 text-center mb-6">KPIs per mission are detailed within work experience.</p>
+       <p className="text-xs text-gray-400 text-center mb-6 cv-item-block">KPIs per mission are detailed within work experience.</p>
 
 
-      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} className="cv-item-block" />
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-4 cv-item-block">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
           <p className="text-xs mt-1 text-green-600">Key KPIs: {renderPlaceholder("Time-to-hire, retention, etc. from description")}</p>
@@ -877,26 +877,26 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
       
-      <SectionTitle title={t.searchCompletionMetrics} icon={<Activity className="inline-block mr-2"/>} />
-      {renderPlaceholder(t.searchCompletionMetrics)}
+      <SectionTitle title={t.searchCompletionMetrics} icon={<Activity className="inline-block mr-2"/>} className="cv-item-block" />
+      <div className="cv-item-block">{renderPlaceholder(t.searchCompletionMetrics)}</div>
 
 
-      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="cv-item-block" />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 cv-item-block">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
         </div>
       ))}
 
-      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
-      <p className="text-sm mb-6">{data.skills.join(', ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="cv-item-block" />
+      <p className="text-sm mb-6 cv-item-block">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="cv-item-block" />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -908,7 +908,7 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`}>
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 cv-item-block">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={110} height={110} className="rounded-full mx-auto shadow-md object-cover border-2 border-gray-300 p-0.5" data-ai-hint="elegant portrait" />
         )}
@@ -917,20 +917,20 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
         {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-md text-blue-700 hover:underline">LinkedIn Profile</a>}
       </div>
 
-      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="text-gray-700" />
-      <p className="text-md whitespace-pre-line text-gray-600 mb-6">{data.profile}</p>
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
+      <p className="text-md whitespace-pre-line text-gray-600 mb-6 cv-item-block">{data.profile}</p>
       
-      <SectionTitle title={t.serviceSuite} icon={<Briefcase className="inline-block mr-2"/>} className="text-gray-700" />
+      <SectionTitle title={t.serviceSuite} icon={<Briefcase className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
       {data.serviceSuite && data.serviceSuite.length > 0 ? (
-        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6">
+        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6 cv-item-block">
             {data.serviceSuite.map((service, idx) => <li key={idx}>{service}</li>)}
         </ul>
-      ) : renderPlaceholder(t.serviceSuite + " (e.g., Retained Search, Board Advisory, Assessment)")}
+      ) : <div className="cv-item-block">{renderPlaceholder(t.serviceSuite + " (e.g., Retained Search, Board Advisory, Assessment)")}</div>}
 
 
-      <SectionTitle title={t.workExperience} icon={<Activity className="inline-block mr-2"/>} className="text-gray-700" />
+      <SectionTitle title={t.workExperience} icon={<Activity className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-4 cv-item-block">
           <h3 className="text-lg font-semibold text-gray-700">{exp.title} at {exp.company}</h3>
           <p className="text-sm text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 text-gray-600">
@@ -939,39 +939,39 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
         </div>
       ))}
 
-      <SectionTitle title={t.typicalMandates} icon={<FolderKanban className="inline-block mr-2"/>} className="text-gray-700" />
+      <SectionTitle title={t.typicalMandates} icon={<FolderKanban className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
       {data.typicalMandates && data.typicalMandates.length > 0 ? (
-        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6">
+        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6 cv-item-block">
             {data.typicalMandates.map((mandate, idx) => <li key={idx}>{mandate}</li>)}
         </ul>
-      ) : renderPlaceholder(t.typicalMandates)}
+      ) : <div className="cv-item-block">{renderPlaceholder(t.typicalMandates)}</div>}
       
-      <SectionTitle title={t.testimonials} icon={<Star className="inline-block mr-2"/>} className="text-gray-700" />
+      <SectionTitle title={t.testimonials} icon={<Star className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
       {data.testimonials && data.testimonials.length > 0 ? (
         data.testimonials.map((testimonial, idx) => (
-          <blockquote key={idx} className="italic text-md text-gray-600 border-l-4 border-gray-300 pl-4 mb-3">
+          <blockquote key={idx} className="italic text-md text-gray-600 border-l-4 border-gray-300 pl-4 mb-3 cv-item-block">
             "{testimonial.quote}" <cite className="block not-italic text-sm text-gray-500">- {testimonial.author}</cite>
           </blockquote>
         ))
-      ) : renderPlaceholder(t.testimonials)}
+      ) : <div className="cv-item-block">{renderPlaceholder(t.testimonials)}</div>}
 
 
-      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="text-gray-700" />
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3 text-gray-600">
+        <div key={index} className="mb-3 text-gray-600 cv-item-block">
           <h3 className="text-lg font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-sm text-gray-500">{edu.dates}</p>
         </div>
       ))}
 
-      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="text-gray-700" />
-      <p className="text-md text-gray-600 mb-6">{data.skills.join(' • ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
+      <p className="text-md text-gray-600 mb-6 cv-item-block">{data.skills.join(' • ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="text-gray-700" />
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="text-gray-700 cv-item-block" />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md text-gray-600">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-md text-gray-600 cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -1050,7 +1050,9 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
              margin: 0 auto !important; 
              box-shadow: none !important; 
              border: none !important;
-             page-break-inside: avoid;
+           }
+           .cv-item-block {
+             page-break-inside: avoid !important;
            }
            .bg-white { background-color: #fff !important; }
            .text-gray-900 { color: #1a202c !important; } 
