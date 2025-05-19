@@ -182,7 +182,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} flex gap-6`}>
-      <div className="flex-grow w-2/3">
+      <div className="flex-grow w-2/3 cv-item-block">
         <h1 className="text-3xl font-bold mb-2 cv-item-block">{data.personalInfo.name}</h1>
         <p className="text-sm text-gray-600 mb-1 cv-item-block">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
         {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4 cv-item-block">{data.personalInfo.contactInfo.linkedin}</p>}
@@ -410,22 +410,22 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
           {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-blue-600 hover:underline block">LinkedIn</a>}
         </div>
         
-        <SectionTitle title={t.skillsSnapshot} icon={<Star className="inline-block mr-2"/>} className="mt-6 text-lg" />
+        <SectionTitle title={t.skillsSnapshot} icon={<Star className="inline-block mr-2"/>} className="mt-6 text-lg cv-item-block" />
         {data.skills.map(skill => <Badge key={skill} variant="secondary" className="mr-1 mb-1">{skill}</Badge>)}
         
-        <SectionTitle title={t.toolsProficiency} icon={<Cpu className="inline-block mr-2"/>} className="mt-4 text-lg" />
+        <SectionTitle title={t.toolsProficiency} icon={<Cpu className="inline-block mr-2"/>} className="mt-4 text-lg cv-item-block" />
         {/* Assuming tools are part of skills or a new field */}
         <p className="text-sm text-gray-500">e.g., Salesforce, LinkedIn Recruiter, Tableau, ATS (Bullhorn)</p>
-        {renderPlaceholder(t.toolsProficiency)}
+        <div className="cv-item-block">{renderPlaceholder(t.toolsProficiency)}</div>
 
-        <SectionTitle title={t.techStack} icon={<Database className="inline-block mr-2"/>} className="mt-4 text-lg" />
-        {data.techStack && data.techStack.length > 0 ? data.techStack.map(tech => <Badge key={tech} variant="outline" className="mr-1 mb-1">{tech}</Badge>) : renderPlaceholder(t.techStack)}
+        <SectionTitle title={t.techStack} icon={<Database className="inline-block mr-2"/>} className="mt-4 text-lg cv-item-block" />
+        {data.techStack && data.techStack.length > 0 ? data.techStack.map(tech => <Badge key={tech} variant="outline" className="mr-1 mb-1">{tech}</Badge>) : <div className="cv-item-block">{renderPlaceholder(t.techStack)}</div>}
         
-        <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="mt-4 text-lg" />
-        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}
+        <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="mt-4 text-lg cv-item-block" />
+        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}
       </div>
 
-      <div className="col-span-2"> {/* Right Column */}
+      <div className="col-span-2 cv-item-block"> {/* Right Column */}
         <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0 cv-item-block" />
         <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
@@ -472,25 +472,25 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
           {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="hover:underline block">LinkedIn</a>}
         </div>
         
-        <h3 className="font-semibold text-sm mt-6 mb-2 border-b border-accent-foreground/50 pb-1">{t.aiToolsUsed}</h3>
+        <h3 className="font-semibold text-sm mt-6 mb-2 border-b border-accent-foreground/50 pb-1 cv-item-block">{t.aiToolsUsed}</h3>
         {data.aiToolsUsed && data.aiToolsUsed.length > 0 ? 
             data.aiToolsUsed.map(tool => <Badge key={tool} variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">{tool}</Badge>) 
-          : <>
+          : <div className="cv-item-block">
               <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">SeekOut</Badge>
               <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">Loxo</Badge>
               <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">Talentis</Badge>
               {renderPlaceholder(t.aiToolsUsed)}
-            </>
+            </div>
         }
         
-        <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1">{t.skills}</h3>
-        {data.skills.slice(0,5).map(skill => <p key={skill} className="text-xs mb-0.5">{skill}</p>)}
+        <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1 cv-item-block">{t.skills}</h3>
+        <div className="cv-item-block">{data.skills.slice(0,5).map(skill => <p key={skill} className="text-xs mb-0.5">{skill}</p>)}</div>
 
-         <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1">{t.languages}</h3>
-        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-xs">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}
+         <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1 cv-item-block">{t.languages}</h3>
+        <div className="cv-item-block">{data.languages && data.languages.map(lang => <p key={lang.language} className="text-xs">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}</div>
       </div>
 
-      <div className="w-3/4 p-6"> {/* Main Content */}
+      <div className="w-3/4 p-6 cv-item-block"> {/* Main Content */}
         <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0 cv-item-block" />
         <p className="text-sm whitespace-pre-line cv-item-block">{data.profile}</p>
 
@@ -624,16 +624,16 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 cv-item-block">
         <div>
-          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="cv-item-block" />
           {data.languages && data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{langToFlag(lang.language)} {lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
+            <p key={index} className="text-sm cv-item-block">{langToFlag(lang.language)} {lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </div>
         <div>
-          <SectionTitle title={t.geographicReach} icon={<MapPin className="inline-block mr-2"/>} />
+          <SectionTitle title={t.geographicReach} icon={<MapPin className="inline-block mr-2"/>} className="cv-item-block" />
           {data.geographicReach && data.geographicReach.length > 0 ? 
             data.geographicReach.map(region => <Badge key={region} variant="outline" className="mr-1 mb-1">{region}</Badge>)
-            : renderPlaceholder(t.geographicReach)
+            : <div className="cv-item-block">{renderPlaceholder(t.geographicReach)}</div>
           }
            <p className="text-xs text-gray-400 mt-1">e.g., EMEA, APAC, North America</p>
         </div>
@@ -685,13 +685,13 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
         {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-md text-blue-600 hover:underline">LinkedIn</a>}
       </div>
       
-      <h2 className={sectionHeaderStyle}><FileText size={24} className="mr-2"/>{t.profileSummary}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><FileText size={24} className="mr-2"/>{t.profileSummary}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
         <p className="text-sm whitespace-pre-line">{data.profile}</p>
       </div>
 
-      <h2 className={sectionHeaderStyle}><Briefcase size={24} className="mr-2"/>{t.workExperience}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><Briefcase size={24} className="mr-2"/>{t.workExperience}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
         {data.experience.map((exp, index) => (
           <div key={index} className="mb-4 last:mb-0 cv-item-block">
             <h3 className="text-md font-semibold text-primary">{exp.title} <span className="font-normal text-gray-700">at</span> {exp.company}</h3>
@@ -704,29 +704,29 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
         ))}
       </div>
       
-      <h2 className={sectionHeaderStyle}><Cpu size={24} className="mr-2"/>{t.techStacksHiredFor}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><Cpu size={24} className="mr-2"/>{t.techStacksHiredFor}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
         {data.techStacksHiredFor && data.techStacksHiredFor.length > 0 ? 
           data.techStacksHiredFor.map(stack => <Badge key={stack} className="mr-1 mb-1 bg-accent text-accent-foreground">{stack}</Badge>)
-          : renderPlaceholder(t.techStacksHiredFor)
+          : <div className="cv-item-block">{renderPlaceholder(t.techStacksHiredFor)}</div>
         }
       </div>
 
-      <h2 className={sectionHeaderStyle}><Lightbulb size={24} className="mr-2"/>{t.industryFocus}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><Lightbulb size={24} className="mr-2"/>{t.industryFocus}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
          {data.industryFocus && data.industryFocus.length > 0 ? 
             data.industryFocus.map(focus => <Badge key={focus} variant="secondary" className="mr-1 mb-1">{focus}</Badge>)
-          : <>
+          : <div className="cv-item-block">
               <Badge variant="secondary" className="mr-1 mb-1">SaaS</Badge>
               <Badge variant="secondary" className="mr-1 mb-1">FinTech</Badge>
               <Badge variant="secondary" className="mr-1 mb-1">DeepTech</Badge>
               {renderPlaceholder(t.industryFocus)}
-            </>
+            </div>
          }
       </div>
 
-      <h2 className={sectionHeaderStyle}><Award size={24} className="mr-2"/>{t.education}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><Award size={24} className="mr-2"/>{t.education}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
         {data.education.map((edu, index) => (
           <div key={index} className="mb-3 last:mb-0 cv-item-block">
             <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
@@ -735,15 +735,15 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
         ))}
       </div>
 
-      <h2 className={sectionHeaderStyle}><Star size={24} className="mr-2"/>{t.skills}</h2>
-      <div className={sectionContentStyle}>
+      <h2 className={`${sectionHeaderStyle} cv-item-block`}><Star size={24} className="mr-2"/>{t.skills}</h2>
+      <div className={`${sectionContentStyle} cv-item-block`}>
         <p className="text-sm">{data.skills.join(', ')}</p>
       </div>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className={sectionHeaderStyle}><Globe size={24} className="mr-2"/>{t.languages}</h2>
-          <div className={sectionContentStyle}>
+          <h2 className={`${sectionHeaderStyle} cv-item-block`}><Globe size={24} className="mr-2"/>{t.languages}</h2>
+          <div className={`${sectionContentStyle} cv-item-block`}>
             {data.languages.map((lang, index) => (
               <p key={index} className="text-sm cv-item-block">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
             ))}
@@ -1019,7 +1019,6 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
 
       printWindow.document.write('<html><head><title>Print CV</title>');
       
-      // Attempt to copy all styles
       Array.from(document.styleSheets).forEach(styleSheet => {
         try {
           const cssRules = styleSheet.cssRules ? Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('\n') : '';
@@ -1029,7 +1028,6 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
             printWindow.document.head.appendChild(styleElement);
           }
         } catch (e) {
-          // Some stylesheets (e.g., cross-origin) might not be accessible
           if (styleSheet.href) {
             const linkElement = printWindow.document.createElement('link');
             linkElement.rel = 'stylesheet';
@@ -1040,16 +1038,19 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
         }
       });
       
-      // Add specific print styles to ensure only the CV is printed correctly
        const printSpecificStyle = printWindow.document.createElement('style');
        printSpecificStyle.innerHTML = `
          @media print {
            body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
            .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; transform: scale(1) !important; box-shadow: none !important; border: none !important; }
-           .print-container > div { /* The A4 styled div */
+           .print-container > div { /* Targets the scaled div */
              margin: 0 auto !important; 
              box-shadow: none !important; 
              border: none !important;
+             transform: none !important; /* Ensure scale is reset for print */
+           }
+           .print-container > div > div { /* Targets the actual A4 styled div inside scaled div */
+              /* Add any specific A4 page print styles if needed, but usually handled by a4Style */
            }
            .cv-item-block {
              page-break-inside: avoid !important;
@@ -1069,8 +1070,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       setTimeout(() => {
         printWindow.focus();
         printWindow.print();
-        // printWindow.close(); // Consider user experience before auto-closing
-      }, 500); // Delay to ensure styles are applied
+      }, 500); 
 
     } else {
       alert("Could not find CV content to print.");
@@ -1104,16 +1104,14 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
         </CardContent>
       </Card>
       
-      <ScrollArea className="flex-grow bg-background p-2 md:p-4 rounded-md shadow-inner">
-        <div id="cv-preview-area">
+      <ScrollArea className="flex-grow bg-background rounded-md shadow-inner">
+        <div id="cv-preview-area" className="flex justify-center items-start py-4">
             {cvData && CurrentTemplate ? (
-              // The scaling is applied here for preview purposes. The print function attempts to undo this.
-              // Adjusted scale and width for larger preview, original 595px for A4 width, 840px now for preview.
-              <div className="transform scale-[0.70] origin-top mx-auto" style={{ width: 'calc(840px / 0.70 * 0.70)' }}> 
+              <div className="transform scale-[0.70] origin-top"> 
                 <CurrentTemplate data={cvData} />
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-8 text-center">
+              <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-8 text-center min-h-[400px]">
                 <Eye size={48} className="mb-4 text-primary" />
                 <p className="text-lg">Your CV preview will appear here.</p>
                 <p>Please ensure your CV data is loaded and select a template.</p>
