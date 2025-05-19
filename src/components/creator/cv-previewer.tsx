@@ -29,7 +29,6 @@ const translations = {
     professionalJourney: "Professional Journey",
     skillsSnapshot: "Skills Snapshot",
     educationCredentials: "Education & Credentials",
-    // New template sections
     techStack: "Technology Stack",
     toolsProficiency: "Tools Proficiency",
     kpisAndMetrics: "KPIs & Metrics",
@@ -56,6 +55,11 @@ const translations = {
     typicalMandates: "Typical Mandates",
     portfolioImpact: "Portfolio Impact",
     contact: "Contact",
+    // Proficiency levels
+    native: "Native",
+    fluent: "Fluent",
+    conversational: "Conversational",
+    basic: "Basic",
   },
   fr: {
     profileSummary: "Résumé du Profil",
@@ -69,7 +73,6 @@ const translations = {
     professionalJourney: "Parcours Professionnel",
     skillsSnapshot: "Aperçu des Compétences",
     educationCredentials: "Formation & Diplômes",
-    // New template sections - simple translations for now
     techStack: "Stack Technologique",
     toolsProficiency: "Maîtrise des Outils",
     kpisAndMetrics: "Indicateurs Clés & Métriques",
@@ -96,12 +99,24 @@ const translations = {
     typicalMandates: "Mandats Typiques",
     portfolioImpact: "Impact Portefeuille",
     contact: "Contact",
+    // Proficiency levels
+    native: "Natif / Maternelle",
+    fluent: "Courant",
+    conversational: "Conversationnel",
+    basic: "Basique / Notions",
   },
 };
 
-const getTranslations = (lang?: string) => {
+type TranslationObject = typeof translations.en; // Define a type for one language's translations
+
+const getTranslations = (lang?: string): TranslationObject => {
   if (lang === 'fr') return translations.fr;
   return translations.en; // Default to English
+};
+
+const getTranslatedProficiency = (proficiency: string, t: TranslationObject): string => {
+  const key = proficiency.toLowerCase() as keyof TranslationObject;
+  return t[key] || proficiency; // Fallback to original if no translation
 };
 
 const renderPlaceholder = (sectionName: string) => (
@@ -155,7 +170,7 @@ const ClassicTemplate = ({ data }: { data: CVData }) => {
         <>
           <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -202,7 +217,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
           <>
             <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
             {data.languages.map((lang, index) => (
-              <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+              <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
             ))}
           </>
         )}
@@ -252,7 +267,7 @@ const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
         <>
           <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -263,7 +278,7 @@ const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
 const MarketingTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} border-2 border-accent`}>
+    <div className={`${a4Style} border-2 border-accent bg-white text-gray-900`}>
       {data.photo && (
         <div className="mb-6 text-center">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl object-cover" data-ai-hint="dynamic portrait"/>
@@ -305,7 +320,7 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
         <>
           <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.languages}</h2>
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md">{lang.language}: <span className="font-semibold">{lang.proficiency}</span></p>
+            <p key={index} className="text-md">{lang.language}: <span className="font-semibold">{getTranslatedProficiency(lang.proficiency, t)}</span></p>
           ))}
         </>
       )}
@@ -316,7 +331,7 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
 const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
       <div className="text-center mb-6">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-gray-700 object-cover mb-3" data-ai-hint="corporate headshot"/>
@@ -365,7 +380,7 @@ const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
         <>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm text-gray-700">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-sm text-gray-700">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -383,7 +398,7 @@ const SectionTitle = ({ title, icon, className }: { title: string; icon?: React.
 const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} grid grid-cols-3 gap-x-6`}>
+    <div className={`${a4Style} grid grid-cols-3 gap-x-6 bg-white text-gray-900`}>
       <div className="col-span-1 border-r pr-6 border-gray-200"> {/* Left Column */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-full mx-auto shadow-md object-cover mb-4" data-ai-hint="professional portrait" />
@@ -407,7 +422,7 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
         {data.techStack && data.techStack.length > 0 ? data.techStack.map(tech => <Badge key={tech} variant="outline" className="mr-1 mb-1">{tech}</Badge>) : renderPlaceholder(t.techStack)}
         
         <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="mt-4 text-lg" />
-        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-sm">{lang.language}: {lang.proficiency}</p>)}
+        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}
       </div>
 
       <div className="col-span-2"> {/* Right Column */}
@@ -445,7 +460,7 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
 const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} flex`}>
+    <div className={`${a4Style} flex bg-white text-gray-900`}>
       <div className="w-1/4 bg-accent text-accent-foreground p-6 rounded-l-md"> {/* Dark Sidebar */}
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto shadow-md object-cover mb-4 border-2 border-white" data-ai-hint="modern portrait" />
@@ -472,7 +487,7 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
         {data.skills.slice(0,5).map(skill => <p key={skill} className="text-xs mb-0.5">{skill}</p>)}
 
          <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1">{t.languages}</h3>
-        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-xs">{lang.language}: {lang.proficiency}</p>)}
+        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-xs">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>)}
       </div>
 
       <div className="w-3/4 p-6"> {/* Main Content */}
@@ -518,7 +533,7 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
 const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
       <div className="flex justify-between items-start mb-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
@@ -572,7 +587,7 @@ const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
         <>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md text-gray-700">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-md text-gray-700">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -592,7 +607,7 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
   };
 
   return (
-    <div className={`${a4Style}`}>
+    <div className={`${a4Style} bg-white text-gray-900`}>
       <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary">
         <div>
           <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
@@ -611,7 +626,7 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
         <div>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages && data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{langToFlag(lang.language)} {lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-sm">{langToFlag(lang.language)} {lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </div>
         <div>
@@ -660,7 +675,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
   const sectionContentStyle = "p-4 border border-t-0 border-primary rounded-b-md mb-4";
 
   return (
-    <div className={`${a4Style}`}>
+    <div className={`${a4Style} bg-white text-gray-900`}>
       <div className="text-center mb-8">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto ring-4 ring-accent p-1 object-cover" data-ai-hint="dynamic portrait" />
@@ -730,7 +745,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
           <h2 className={sectionHeaderStyle}><Globe size={24} className="mr-2"/>{t.languages}</h2>
           <div className={sectionContentStyle}>
             {data.languages.map((lang, index) => (
-              <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+              <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
             ))}
           </div>
         </>
@@ -745,7 +760,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
   const tightSpacingStyle = "mb-2"; // Tighter spacing for sections
 
   return (
-    <div className={`${a4Style} ${smallTextStyle}`}>
+    <div className={`${a4Style} ${smallTextStyle} bg-white text-gray-900`}>
       {data.photo && (
         <div className="mb-3 text-center">
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full mx-auto shadow-sm object-cover" data-ai-hint="focused headshot" />
@@ -805,7 +820,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
         <>
           <SectionTitle title={t.languages} className={`mt-3 ${tightSpacingStyle} text-lg`} />
           {data.languages.map((lang, index) => (
-            <p key={index} className={`${smallTextStyle}`}>{lang.language}: {lang.proficiency}</p>
+            <p key={index} className={`${smallTextStyle}`}>{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -816,7 +831,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
 const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style}`}>
+    <div className={`${a4Style} bg-white text-gray-900`}>
       <div className="text-center mb-6 pb-4 border-b-2 border-primary">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-lg object-cover mb-3 border-2 border-primary" data-ai-hint="results-oriented portrait" />
@@ -881,7 +896,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
         <>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-sm">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -892,7 +907,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
 const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
-    <div className={`${a4Style} font-serif`}>
+    <div className={`${a4Style} font-serif bg-white text-gray-900`}>
       <div className="text-center mb-8">
         {data.photo && (
           <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={110} height={110} className="rounded-full mx-auto shadow-md object-cover border-2 border-gray-300 p-0.5" data-ai-hint="elegant portrait" />
@@ -956,7 +971,7 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
         <>
           <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="text-gray-700" />
           {data.languages.map((lang, index) => (
-            <p key={index} className="text-md text-gray-600">{lang.language}: {lang.proficiency}</p>
+            <p key={index} className="text-md text-gray-600">{lang.language}: {getTranslatedProficiency(lang.proficiency, t)}</p>
           ))}
         </>
       )}
@@ -969,15 +984,15 @@ const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVDa
   { id: 'classic', name: 'Classic', component: ClassicTemplate },
   { id: 'photoRight', name: 'Photo Right', component: PhotoRightTemplate },
   { id: 'marketing', name: 'Marketing', component: MarketingTemplate },
-  { id: 'anonymizedConfidential', name: 'Anonymized Confidential', component: AnonymizedConfidentialTemplate },
-  { id: 'financePrivateEquity', name: 'Finance & PE', component: FinancePrivateEquityTemplate },
+  { id: 'anonymizedConfidential', name: 'Anonymized', component: AnonymizedConfidentialTemplate },
+  { id: 'financePrivateEquity', name: 'Finance/PE', component: FinancePrivateEquityTemplate },
   { id: 'dataDrivenExecutive', name: 'Data-Driven Exec.', component: DataDrivenExecutiveTemplate },
-  { id: 'automationSpecialist', name: 'Automation Specialist', component: AutomationSpecialistTemplate },
+  { id: 'automationSpecialist', name: 'Automation Spec.', component: AutomationSpecialistTemplate },
   { id: 'leadershipAdvisory', name: 'Leadership/Advisory', component: LeadershipAdvisoryTemplate },
   { id: 'internationalHeadhunter', name: 'Intl. Headhunter', component: InternationalHeadhunterTemplate },
-  { id: 'techStartupsFocus', name: 'Tech/Startups Focus', component: TechStartupsFocusTemplate },
+  { id: 'techStartupsFocus', name: 'Tech/Startups', component: TechStartupsFocusTemplate },
   { id: 'searchResearcherAnalyst', name: 'Researcher/Analyst', component: SearchResearcherAnalystTemplate },
-  { id: 'performanceOptimizedConsultant', name: 'Performance Optimized', component: PerformanceOptimizedConsultantTemplate },
+  { id: 'performanceOptimizedConsultant', name: 'Performance Opt.', component: PerformanceOptimizedConsultantTemplate },
   { id: 'classicBoutiqueSearch', name: 'Classic Boutique', component: ClassicBoutiqueSearchTemplate },
 ];
 
@@ -996,16 +1011,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     const printContents = document.getElementById('cv-preview-area')?.innerHTML;
     
     if (printContents) {
-      const originalBodyStyles = document.body.className;
-      const originalBodyInlineStyles = document.body.style.cssText;
-      
-      const originalHeadStyles: string[] = [];
-      document.head.querySelectorAll('style').forEach(s => originalHeadStyles.push(s.innerHTML));
-      const originalHeadLinks: string[] = [];
-      document.head.querySelectorAll('link[rel="stylesheet"]').forEach(l => originalHeadLinks.push(l.outerHTML));
-
-      // Create a new window or iframe for printing
-      const printWindow = window.open('', '_blank');
+      const printWindow = window.open('', '_blank', 'height=800,width=1000');
       if (!printWindow) {
         alert("Please allow popups for this website to print the CV.");
         return;
@@ -1013,15 +1019,27 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
 
       printWindow.document.write('<html><head><title>Print CV</title>');
       
-      // Re-apply original styles and links to the new window
-      originalHeadLinks.forEach(linkHTML => printWindow.document.write(linkHTML));
-      originalHeadStyles.forEach(styleContent => {
-        const styleEl = printWindow.document.createElement('style');
-        styleEl.type = 'text/css';
-        styleEl.appendChild(printWindow.document.createTextNode(styleContent));
-        printWindow.document.head.appendChild(styleEl);
+      // Attempt to copy all styles
+      Array.from(document.styleSheets).forEach(styleSheet => {
+        try {
+          const cssRules = styleSheet.cssRules ? Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('\n') : '';
+          if (cssRules) {
+            const styleElement = printWindow.document.createElement('style');
+            styleElement.appendChild(printWindow.document.createTextNode(cssRules));
+            printWindow.document.head.appendChild(styleElement);
+          }
+        } catch (e) {
+          // Some stylesheets (e.g., cross-origin) might not be accessible
+          if (styleSheet.href) {
+            const linkElement = printWindow.document.createElement('link');
+            linkElement.rel = 'stylesheet';
+            linkElement.type = styleSheet.type;
+            linkElement.href = styleSheet.href;
+            printWindow.document.head.appendChild(linkElement);
+          }
+        }
       });
-
+      
       // Add specific print styles to ensure only the CV is printed correctly
        const printSpecificStyle = printWindow.document.createElement('style');
        printSpecificStyle.innerHTML = `
@@ -1032,12 +1050,11 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
              margin: 0 auto !important; 
              box-shadow: none !important; 
              border: none !important;
-             page-break-inside: avoid; /* Try to keep template on one page if possible */
+             page-break-inside: avoid;
            }
-           /* Ensure specific Tailwind classes like bg-white and text colors print */
            .bg-white { background-color: #fff !important; }
            .text-gray-900 { color: #1a202c !important; } 
-           /* Add more specific styles from your templates if they don't print correctly */
+           /* Add other explicit color classes if needed */
          }
        `;
        printWindow.document.head.appendChild(printSpecificStyle);
@@ -1047,17 +1064,14 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       printWindow.document.write('</body></html>');
       printWindow.document.close();
       
-      // Delay print to allow content to load
       setTimeout(() => {
         printWindow.focus();
         printWindow.print();
-        // printWindow.close(); // Optional: close window after print
-      }, 500);
+        // printWindow.close(); // Consider user experience before auto-closing
+      }, 500); // Delay to ensure styles are applied
 
     } else {
-      // Fallback if printContents is not found
       alert("Could not find CV content to print.");
-      window.print();
     }
   };
 
