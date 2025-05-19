@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
-import { Eye, Printer } from 'lucide-react';
+import { Eye, Printer, Briefcase, Users, Globe, Lightbulb, Activity, Star, ShieldCheck, Bot, Landmark, FileText, MapPin, Cpu, Database, UsersRound, Trophy, BarChart3, Award, Handshake, FolderKanban } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 // Common styling for A4-like preview
-const a4Style = "p-8 border rounded-md shadow-lg min-h-[842px] w-[595px] mx-auto bg-white text-gray-900";
+const a4Style = "p-8 border rounded-md shadow-lg min-h-[1188px] w-[840px] mx-auto bg-white text-gray-900 font-sans"; // Increased size slightly for two-column
 
 // --- TRANSLATION HELPER ---
 const translations = {
@@ -27,6 +29,33 @@ const translations = {
     professionalJourney: "Professional Journey",
     skillsSnapshot: "Skills Snapshot",
     educationCredentials: "Education & Credentials",
+    // New template sections
+    techStack: "Technology Stack",
+    toolsProficiency: "Tools Proficiency",
+    kpisAndMetrics: "KPIs & Metrics",
+    analyticsReporting: "Analytics & Reporting Snapshot",
+    automatedProcesses: "Automated Processes Implemented",
+    aiToolsUsed: "AI Tools Utilized",
+    advisoryProjects: "Advisory Projects",
+    boardExperience: "Boardroom Experience",
+    geographicReach: "Geographic Reach",
+    globalRoles: "Global Roles",
+    localMissions: "Local Missions",
+    deiAndCulturalFit: "DEI & Cultural Fit",
+    techStacksHiredFor: "Tech Stacks Hired For",
+    industryFocus: "Industry Focus",
+    impactMetrics: "Impact Metrics",
+    researchMethodologies: "Research Methodologies",
+    mappingTools: "Mapping Tools",
+    publicationsProjects: "Publications & Projects",
+    performanceHighlights: "Performance Highlights",
+    searchCompletionMetrics: "Search Completion Metrics",
+    testimonials: "Testimonials",
+    clientLogos: "Client Portfolio",
+    serviceSuite: "Service Suite",
+    typicalMandates: "Typical Mandates",
+    portfolioImpact: "Portfolio Impact",
+    contact: "Contact",
   },
   fr: {
     profileSummary: "Résumé du Profil",
@@ -40,6 +69,33 @@ const translations = {
     professionalJourney: "Parcours Professionnel",
     skillsSnapshot: "Aperçu des Compétences",
     educationCredentials: "Formation & Diplômes",
+    // New template sections - simple translations for now
+    techStack: "Stack Technologique",
+    toolsProficiency: "Maîtrise des Outils",
+    kpisAndMetrics: "Indicateurs Clés & Métriques",
+    analyticsReporting: "Aperçu Analytique",
+    automatedProcesses: "Processus Automatisés Mis en Œuvre",
+    aiToolsUsed: "Outils d'IA Utilisés",
+    advisoryProjects: "Projets de Conseil",
+    boardExperience: "Expérience en Conseil d'Administration",
+    geographicReach: "Portée Géographique",
+    globalRoles: "Rôles Internationaux",
+    localMissions: "Missions Locales",
+    deiAndCulturalFit: "DEI & Adéquation Culturelle",
+    techStacksHiredFor: "Stacks Techniques Recrutées",
+    industryFocus: "Focus Industriel",
+    impactMetrics: "Métriques d'Impact",
+    researchMethodologies: "Méthodologies de Recherche",
+    mappingTools: "Outils de Mapping",
+    publicationsProjects: "Publications & Projets",
+    performanceHighlights: "Faits Marquants de Performance",
+    searchCompletionMetrics: "Métriques de Finalisation de Recherche",
+    testimonials: "Témoignages",
+    clientLogos: "Portefeuille Clients",
+    serviceSuite: "Gamme de Services",
+    typicalMandates: "Mandats Typiques",
+    portfolioImpact: "Impact Portefeuille",
+    contact: "Contact",
   },
 };
 
@@ -48,6 +104,11 @@ const getTranslations = (lang?: string) => {
   return translations.en; // Default to English
 };
 
+const renderPlaceholder = (sectionName: string) => (
+  <p className="text-sm text-gray-400 italic mt-1">
+    {`Data for "${sectionName}" can be added via an extended CV editor.`}
+  </p>
+);
 
 // --- TEMPLATE COMPONENTS ---
 
@@ -155,19 +216,20 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   );
 };
 
-const AnonymizedTemplate = ({ data }: { data: CVData }) => {
+const AnonymizedConfidentialTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style}`}>
-      <h1 className="text-3xl font-bold mb-1 text-center">{t.candidateProfile}</h1>
-      <p className="text-sm text-gray-600 text-center mb-4">{t.contactUponRequest}</p>
+      <h1 className="text-3xl font-bold mb-1 text-center text-primary">{t.candidateProfile}</h1>
+      <p className="text-sm text-gray-600 text-center mb-6">{t.contactUponRequest}</p>
       
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.profileSummary}</h2>
       <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.workExperience}</h2>
       {data.experience.map((exp, index) => (
         <div key={index} className="mb-3">
+          {/* Company name might be replaced by industry by user, template just displays it */}
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
           <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
@@ -175,7 +237,7 @@ const AnonymizedTemplate = ({ data }: { data: CVData }) => {
           </ul>
         </div>
       ))}
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.education}</h2>
       {data.education.map((edu, index) => (
         <div key={index} className="mb-3">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
@@ -183,12 +245,12 @@ const AnonymizedTemplate = ({ data }: { data: CVData }) => {
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.skills}</h2>
       <p className="text-sm">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-gray-700">{t.languages}</h2>
           {data.languages.map((lang, index) => (
             <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
           ))}
@@ -251,52 +313,650 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
   );
 };
 
-const FinanceTemplate = ({ data }: { data: CVData }) => {
+const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
-  // text-primary, text-gray-600, text-blue-600, border-gray-300 are used for specific elements.
-  // These will now render based on their default Tailwind definitions on a white background.
   return (
-    <div className={`${a4Style}`}>
-      {data.photo && (
-        <div className="mb-4 text-center">
-          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-primary object-cover" data-ai-hint="formal portrait"/>
-        </div>
-      )}
-      <h1 className="text-3xl font-bold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
-      <p className="text-sm text-gray-600 text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
+    <div className={`${a4Style} font-serif`}>
+      <div className="text-center mb-6">
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-gray-700 object-cover mb-3" data-ai-hint="corporate headshot"/>
+        )}
+        <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
+        <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-700 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
+      </div>
       
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
-      <p className="text-sm whitespace-pre-line">{data.profile}</p>
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
+      <p className="text-sm whitespace-pre-line text-gray-700 mb-6">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
       {data.experience.map((exp, index) => (
-        <div key={index} className="mb-3">
-          <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
-          <p className="text-xs text-gray-500">{exp.dates}</p>
-          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
+        <div key={index} className="mb-4 relative pl-8 before:absolute before:left-3 before:top-1 before:bottom-1 before:w-0.5 before:bg-gray-300">
+           <div className="absolute left-0 top-1.5 w-6 h-6 bg-primary rounded-full border-2 border-white flex items-center justify-center text-white text-xs">{index+1}</div>
+          <h3 className="text-md font-semibold text-gray-800">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
+          <p className="text-xs text-gray-500 mb-1">{exp.dates}</p>
+          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 text-gray-700">
             {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
           </ul>
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+      <SectionTitle title={t.portfolioImpact} icon={<Landmark className="inline-block mr-2"/>} />
+      {data.portfolioImpact && data.portfolioImpact.length > 0 ? (
+         data.portfolioImpact.map((item, idx) => (
+          <div key={idx} className="mb-2 text-sm text-gray-700"><strong>{item.title}:</strong> {item.description}</div>
+         ))
+      ) : renderPlaceholder(t.portfolioImpact)}
+
+
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
       {data.education.map((edu, index) => (
-        <div key={index} className="mb-3">
+        <div key={index} className="mb-3 text-gray-700">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
           <p className="text-xs text-gray-500">{edu.dates}</p>
           {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
-      <p className="text-sm">{data.skills.join(', ')}</p>
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
+      <p className="text-sm text-gray-700 mb-6">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-sm text-gray-700">{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
+
+const SectionTitle = ({ title, icon, className }: { title: string; icon?: React.ReactNode, className?: string }) => (
+  <h2 className={`text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-8 mb-3 text-gray-700 flex items-center ${className}`}>
+    {icon} {title}
+  </h2>
+);
+
+
+const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} grid grid-cols-3 gap-x-6`}>
+      <div className="col-span-1 border-r pr-6 border-gray-200"> {/* Left Column */}
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-full mx-auto shadow-md object-cover mb-4" data-ai-hint="professional portrait" />
+        )}
+        <h1 className="text-2xl font-bold text-center text-primary">{data.personalInfo.name}</h1>
+        <div className="text-sm text-gray-600 text-center mt-1">
+          <p>{data.personalInfo.contactInfo.email}</p>
+          <p>{data.personalInfo.contactInfo.phone}</p>
+          {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-blue-600 hover:underline block">LinkedIn</a>}
+        </div>
+        
+        <SectionTitle title={t.skillsSnapshot} icon={<Star className="inline-block mr-2"/>} className="mt-6 text-lg" />
+        {data.skills.map(skill => <Badge key={skill} variant="secondary" className="mr-1 mb-1">{skill}</Badge>)}
+        
+        <SectionTitle title={t.toolsProficiency} icon={<Cpu className="inline-block mr-2"/>} className="mt-4 text-lg" />
+        {/* Assuming tools are part of skills or a new field */}
+        <p className="text-sm text-gray-500">e.g., Salesforce, LinkedIn Recruiter, Tableau, ATS (Bullhorn)</p>
+        {renderPlaceholder(t.toolsProficiency)}
+
+        <SectionTitle title={t.techStack} icon={<Database className="inline-block mr-2"/>} className="mt-4 text-lg" />
+        {data.techStack && data.techStack.length > 0 ? data.techStack.map(tech => <Badge key={tech} variant="outline" className="mr-1 mb-1">{tech}</Badge>) : renderPlaceholder(t.techStack)}
+        
+        <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="mt-4 text-lg" />
+        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-sm">{lang.language}: {lang.proficiency}</p>)}
+      </div>
+
+      <div className="col-span-2"> {/* Right Column */}
+        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0" />
+        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+
+        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+        {data.experience.map((exp, index) => (
+          <div key={index} className="mb-4">
+            <h3 className="text-md font-semibold">{exp.title} at {exp.company}</h3>
+            <p className="text-xs text-gray-500">{exp.dates}</p>
+            <p className="text-sm whitespace-pre-line mt-1 italic text-primary">KPIs: {renderPlaceholder("KPIs from description")}</p>
+            <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
+              {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+            </ul>
+          </div>
+        ))}
+
+        <SectionTitle title={t.analyticsReporting} icon={<BarChart3 className="inline-block mr-2"/>} />
+        {renderPlaceholder(t.analyticsReporting)}
+
+        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+        {data.education.map((edu, index) => (
+          <div key={index} className="mb-3">
+            <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+            <p className="text-xs text-gray-500">{edu.dates}</p>
+            {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} flex`}>
+      <div className="w-1/4 bg-accent text-accent-foreground p-6 rounded-l-md"> {/* Dark Sidebar */}
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto shadow-md object-cover mb-4 border-2 border-white" data-ai-hint="modern portrait" />
+        )}
+        <h1 className="text-xl font-bold text-center">{data.personalInfo.name}</h1>
+        <div className="text-xs text-center mt-1 mb-4">
+          <p>{data.personalInfo.contactInfo.email}</p>
+          <p>{data.personalInfo.contactInfo.phone}</p>
+          {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="hover:underline block">LinkedIn</a>}
+        </div>
+        
+        <h3 className="font-semibold text-sm mt-6 mb-2 border-b border-accent-foreground/50 pb-1">{t.aiToolsUsed}</h3>
+        {data.aiToolsUsed && data.aiToolsUsed.length > 0 ? 
+            data.aiToolsUsed.map(tool => <Badge key={tool} variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">{tool}</Badge>) 
+          : <>
+              <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">SeekOut</Badge>
+              <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">Loxo</Badge>
+              <Badge variant="secondary" className="mr-1 mb-1 bg-primary/20 text-primary-foreground">Talentis</Badge>
+              {renderPlaceholder(t.aiToolsUsed)}
+            </>
+        }
+        
+        <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1">{t.skills}</h3>
+        {data.skills.slice(0,5).map(skill => <p key={skill} className="text-xs mb-0.5">{skill}</p>)}
+
+         <h3 className="font-semibold text-sm mt-4 mb-2 border-b border-accent-foreground/50 pb-1">{t.languages}</h3>
+        {data.languages && data.languages.map(lang => <p key={lang.language} className="text-xs">{lang.language}: {lang.proficiency}</p>)}
+      </div>
+
+      <div className="w-3/4 p-6"> {/* Main Content */}
+        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="mt-0" />
+        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+
+        <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+        {data.experience.map((exp, index) => (
+          <div key={index} className="mb-4">
+            <h3 className="text-md font-semibold flex items-center">
+              <Bot size={18} className="mr-2 text-primary"/> {exp.title} at {exp.company}
+            </h3>
+            <p className="text-xs text-gray-500">{exp.dates}</p>
+            <p className="text-sm whitespace-pre-line mt-1 italic text-primary">Efficiency Gains: {renderPlaceholder("Efficiency Gains from description")}</p>
+            <ul className="list-none text-sm whitespace-pre-line pl-0 mt-1">
+              {exp.description.split('\n').map((line, i) => line.trim() && <li key={i} className="flex items-start"><ShieldCheck size={14} className="mr-2 mt-1 text-green-500 shrink-0"/>{line.trim().replace(/^- /, '')}</li>)}
+            </ul>
+          </div>
+        ))}
+        
+        <SectionTitle title={t.automatedProcesses} icon={<FolderKanban className="inline-block mr-2"/>} />
+        {data.automatedProcessesImplemented && data.automatedProcessesImplemented.length > 0 ? (
+          data.automatedProcessesImplemented.map((process, idx) => (
+            <div key={idx} className="mb-2 text-sm">
+              <strong>{process.title}:</strong> {process.description}
+              {process.toolsUsed && process.toolsUsed.length > 0 && <p className="text-xs text-gray-500">Tools: {process.toolsUsed.join(', ')}</p>}
+            </div>
+          ))
+        ) : renderPlaceholder(t.automatedProcesses)}
+
+        <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+        {data.education.map((edu, index) => (
+          <div key={index} className="mb-3">
+            <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+            <p className="text-xs text-gray-500">{edu.dates}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} font-serif`}>
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
+          <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+          {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-sm text-blue-700 hover:underline">LinkedIn</a>}
+        </div>
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-md object-cover shadow-md" data-ai-hint="executive portrait" />
+        )}
+      </div>
+      
+      <div className="text-center my-8">
+        <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="text-center border-none text-2xl" />
+        <p className="text-md whitespace-pre-line text-gray-700 max-w-2xl mx-auto">{data.profile}</p>
+      </div>
+
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">{exp.title} at {exp.company}</h3>
+          <p className="text-sm text-gray-500">{exp.dates}</p>
+          <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 text-gray-700">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+      
+      <SectionTitle title={t.advisoryProjects} icon={<Handshake className="inline-block mr-2"/>} />
+       {data.advisoryProjects && data.advisoryProjects.length > 0 ? (
+          data.advisoryProjects.map((project, idx) => (
+            <div key={idx} className="mb-2 text-sm"><strong>{project.title}:</strong> {project.description}</div>
+          ))
+        ) : renderPlaceholder(t.advisoryProjects)}
+
+
+      <SectionTitle title={t.boardExperience} icon={<UsersRound className="inline-block mr-2"/>} />
+      {data.boardExperience ? <p className="text-sm text-gray-700">{data.boardExperience}</p> : renderPlaceholder(t.boardExperience)}
+
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3 text-gray-700">
+          <h3 className="text-lg font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-sm text-gray-500">{edu.dates}</p>
+        </div>
+      ))}
+
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
+      <p className="text-md text-gray-700 mb-6">{data.skills.join(' • ')}</p>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-md text-gray-700">{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
+
+const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  // Helper for flag icons (simple text based)
+  const langToFlag = (langName: string) => {
+    if (langName.toLowerCase().includes("english")) return "🇬🇧/🇺🇸";
+    if (langName.toLowerCase().includes("french")) return "🇫🇷";
+    if (langName.toLowerCase().includes("german")) return "🇩🇪";
+    if (langName.toLowerCase().includes("spanish")) return "🇪🇸";
+    return "";
+  };
+
+  return (
+    <div className={`${a4Style}`}>
+      <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary">
+        <div>
+          <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
+          <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+          {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-sm text-blue-600 hover:underline">LinkedIn</a>}
+        </div>
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full object-cover shadow-lg border-2 border-primary" data-ai-hint="global professional" />
+        )}
+      </div>
+      
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
+      <p className="text-sm whitespace-pre-line mb-6">{data.profile}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
+          {data.languages && data.languages.map((lang, index) => (
+            <p key={index} className="text-sm">{langToFlag(lang.language)} {lang.language}: {lang.proficiency}</p>
+          ))}
+        </div>
+        <div>
+          <SectionTitle title={t.geographicReach} icon={<MapPin className="inline-block mr-2"/>} />
+          {data.geographicReach && data.geographicReach.length > 0 ? 
+            data.geographicReach.map(region => <Badge key={region} variant="outline" className="mr-1 mb-1">{region}</Badge>)
+            : renderPlaceholder(t.geographicReach)
+          }
+           <p className="text-xs text-gray-400 mt-1">e.g., EMEA, APAC, North America</p>
+        </div>
+      </div>
+      
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      {/* User can differentiate Global vs Local in description. Template shows all. */}
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-4 p-3 border rounded-md hover:shadow-sm">
+          <h3 className="text-md font-semibold">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
+          <p className="text-xs text-gray-500">{exp.dates}</p>
+          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+      
+      <SectionTitle title={t.deiAndCulturalFit} icon={<Users className="inline-block mr-2"/>} />
+      {renderPlaceholder(t.deiAndCulturalFit + " (mention in Profile or Experience)")}
+
+
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
+        </div>
+      ))}
+
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
+      <p className="text-sm mb-6">{data.skills.join(', ')}</p>
+    </div>
+  );
+};
+
+const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  const sectionHeaderStyle = "text-2xl font-bold text-white bg-primary p-2 rounded-t-md mt-8 mb-0 flex items-center";
+  const sectionContentStyle = "p-4 border border-t-0 border-primary rounded-b-md mb-4";
+
+  return (
+    <div className={`${a4Style}`}>
+      <div className="text-center mb-8">
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto ring-4 ring-accent p-1 object-cover" data-ai-hint="dynamic portrait" />
+        )}
+        <h1 className="text-4xl font-extrabold mt-4 text-accent">{data.personalInfo.name}</h1>
+        <p className="text-md text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-md text-blue-600 hover:underline">LinkedIn</a>}
+      </div>
+      
+      <h2 className={sectionHeaderStyle}><FileText size={24} className="mr-2"/>{t.profileSummary}</h2>
+      <div className={sectionContentStyle}>
+        <p className="text-sm whitespace-pre-line">{data.profile}</p>
+      </div>
+
+      <h2 className={sectionHeaderStyle}><Briefcase size={24} className="mr-2"/>{t.workExperience}</h2>
+      <div className={sectionContentStyle}>
+        {data.experience.map((exp, index) => (
+          <div key={index} className="mb-4 last:mb-0">
+            <h3 className="text-md font-semibold text-primary">{exp.title} <span className="font-normal text-gray-700">at</span> {exp.company}</h3>
+            <p className="text-xs text-gray-500">{exp.dates}</p>
+            <p className="text-xs mt-1 text-accent">Impact: {renderPlaceholder("Fundraising/Growth from description")}</p>
+            <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
+              {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+      
+      <h2 className={sectionHeaderStyle}><Cpu size={24} className="mr-2"/>{t.techStacksHiredFor}</h2>
+      <div className={sectionContentStyle}>
+        {data.techStacksHiredFor && data.techStacksHiredFor.length > 0 ? 
+          data.techStacksHiredFor.map(stack => <Badge key={stack} className="mr-1 mb-1 bg-accent text-accent-foreground">{stack}</Badge>)
+          : renderPlaceholder(t.techStacksHiredFor)
+        }
+      </div>
+
+      <h2 className={sectionHeaderStyle}><Lightbulb size={24} className="mr-2"/>{t.industryFocus}</h2>
+      <div className={sectionContentStyle}>
+         {data.industryFocus && data.industryFocus.length > 0 ? 
+            data.industryFocus.map(focus => <Badge key={focus} variant="secondary" className="mr-1 mb-1">{focus}</Badge>)
+          : <>
+              <Badge variant="secondary" className="mr-1 mb-1">SaaS</Badge>
+              <Badge variant="secondary" className="mr-1 mb-1">FinTech</Badge>
+              <Badge variant="secondary" className="mr-1 mb-1">DeepTech</Badge>
+              {renderPlaceholder(t.industryFocus)}
+            </>
+         }
+      </div>
+
+      <h2 className={sectionHeaderStyle}><Award size={24} className="mr-2"/>{t.education}</h2>
+      <div className={sectionContentStyle}>
+        {data.education.map((edu, index) => (
+          <div key={index} className="mb-3 last:mb-0">
+            <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+            <p className="text-xs text-gray-500">{edu.dates}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className={sectionHeaderStyle}><Star size={24} className="mr-2"/>{t.skills}</h2>
+      <div className={sectionContentStyle}>
+        <p className="text-sm">{data.skills.join(', ')}</p>
+      </div>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <h2 className={sectionHeaderStyle}><Globe size={24} className="mr-2"/>{t.languages}</h2>
+          <div className={sectionContentStyle}>
+            {data.languages.map((lang, index) => (
+              <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  const smallTextStyle = "text-xs"; // For higher info density
+  const tightSpacingStyle = "mb-2"; // Tighter spacing for sections
+
+  return (
+    <div className={`${a4Style} ${smallTextStyle}`}>
+      {data.photo && (
+        <div className="mb-3 text-center">
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full mx-auto shadow-sm object-cover" data-ai-hint="focused headshot" />
+        </div>
+      )}
+      <h1 className="text-2xl font-semibold text-center mb-0.5">{data.personalInfo.name}</h1>
+      <p className={`${smallTextStyle} text-gray-500 text-center ${tightSpacingStyle}`}>{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}
+        {data.personalInfo.contactInfo.linkedin && <span className="block">{data.personalInfo.contactInfo.linkedin}</span>}
+      </p>
+      
+      <SectionTitle title={t.profileSummary} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <p className={`${smallTextStyle} whitespace-pre-line ${tightSpacingStyle}`}>{data.profile}</p>
+
+      <SectionTitle title={t.researchMethodologies} icon={<Lightbulb className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      {data.researchMethodologies && data.researchMethodologies.length > 0 ? 
+        <ul className={`list-disc list-inside ${smallTextStyle} pl-3 ${tightSpacingStyle}`}>
+          {data.researchMethodologies.map((method, idx) => <li key={idx}>{method}</li>)}
+        </ul>
+      : renderPlaceholder(t.researchMethodologies)}
+
+      <SectionTitle title={t.mappingTools} icon={<MapPin className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+       {data.mappingTools && data.mappingTools.length > 0 ? 
+        <p className={`${smallTextStyle} ${tightSpacingStyle}`}>{data.mappingTools.join(', ')}</p>
+      : renderPlaceholder(t.mappingTools)}
+
+      <SectionTitle title={t.workExperience} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      {data.experience.map((exp, index) => (
+        <div key={index} className={`${tightSpacingStyle}`}>
+          <h3 className="text-sm font-medium">{exp.title} at {exp.company}</h3>
+          <p className="text-xs text-gray-400">{exp.dates}</p>
+          <ul className={`list-disc list-inside ${smallTextStyle} whitespace-pre-line pl-3`}>
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+      
+      <SectionTitle title={t.publicationsProjects} icon={<FileText className="inline-block mr-1"/>} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      {data.publicationsProjects && data.publicationsProjects.length > 0 ? (
+        data.publicationsProjects.map((item, idx) => (
+          <div key={idx} className={`${smallTextStyle} ${tightSpacingStyle}`}><strong>{item.title}:</strong> {item.description}</div>
+        ))
+      ) : renderPlaceholder(t.publicationsProjects)}
+
+      <SectionTitle title={t.education} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      {data.education.map((edu, index) => (
+        <div key={index} className={`${tightSpacingStyle}`}>
+          <h3 className="text-sm font-medium">{edu.degree} - {edu.institution}</h3>
+          <p className="text-xs text-gray-400">{edu.dates}</p>
+          {edu.description && <p className={`${smallTextStyle} whitespace-pre-line`}>{edu.description}</p>}
+        </div>
+      ))}
+
+      <SectionTitle title={t.skills} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+      <p className={`${smallTextStyle} ${tightSpacingStyle}`}>{data.skills.join(', ')}</p>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <SectionTitle title={t.languages} className={`mt-3 ${tightSpacingStyle} text-lg`} />
+          {data.languages.map((lang, index) => (
+            <p key={index} className={`${smallTextStyle}`}>{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
+
+const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style}`}>
+      <div className="text-center mb-6 pb-4 border-b-2 border-primary">
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-lg object-cover mb-3 border-2 border-primary" data-ai-hint="results-oriented portrait" />
+        )}
+        <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
+        <p className="text-sm text-gray-600">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-sm text-blue-600 hover:underline">LinkedIn Profile</a>}
+      </div>
+
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} />
+      <p className="text-sm whitespace-pre-line mb-6">{data.profile}</p>
+
+      <SectionTitle title={t.performanceHighlights} icon={<Trophy className="inline-block mr-2"/>} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {data.keyMetrics && data.keyMetrics.length > 0 ? data.keyMetrics.map((km, idx) => (
+          <div key={idx} className="p-3 border rounded-md bg-gray-50">
+            <p className="font-semibold text-primary">{km.metric}</p>
+            {km.visual === 'progress' && typeof km.value === 'number' ? (
+              <Progress value={km.value} className="h-3 my-1" />
+            ) : (
+              <p className="text-2xl font-bold text-accent">{km.value.toString()}</p>
+            )}
+          </div>
+        )) : (
+          <>
+          <div className="p-3 border rounded-md bg-gray-50">{renderPlaceholder("Time-to-Hire Metric")} <Progress value={75} className="h-3 my-1" /></div>
+          <div className="p-3 border rounded-md bg-gray-50">{renderPlaceholder("Retention Rate Metric")} <p className="text-2xl font-bold text-accent">95%</p></div>
+          </>
+        )}
+      </div>
+       <p className="text-xs text-gray-400 text-center mb-6">KPIs per mission are detailed within work experience.</p>
+
+
+      <SectionTitle title={t.workExperience} icon={<Briefcase className="inline-block mr-2"/>} />
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-4">
+          <h3 className="text-md font-semibold">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
+          <p className="text-xs text-gray-500">{exp.dates}</p>
+          <p className="text-xs mt-1 text-green-600">Key KPIs: {renderPlaceholder("Time-to-hire, retention, etc. from description")}</p>
+          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+      
+      <SectionTitle title={t.searchCompletionMetrics} icon={<Activity className="inline-block mr-2"/>} />
+      {renderPlaceholder(t.searchCompletionMetrics)}
+
+
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} />
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
+        </div>
+      ))}
+
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} />
+      <p className="text-sm mb-6">{data.skills.join(', ')}</p>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} />
           {data.languages.map((lang, index) => (
             <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
+
+const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} font-serif`}>
+      <div className="text-center mb-8">
+        {data.photo && (
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={110} height={110} className="rounded-full mx-auto shadow-md object-cover border-2 border-gray-300 p-0.5" data-ai-hint="elegant portrait" />
+        )}
+        <h1 className="text-4xl font-bold text-gray-700 mt-3">{data.personalInfo.name}</h1>
+        <p className="text-md text-gray-500">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <a href={data.personalInfo.contactInfo.linkedin} className="text-md text-blue-700 hover:underline">LinkedIn Profile</a>}
+      </div>
+
+      <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="text-gray-700" />
+      <p className="text-md whitespace-pre-line text-gray-600 mb-6">{data.profile}</p>
+      
+      <SectionTitle title={t.serviceSuite} icon={<Briefcase className="inline-block mr-2"/>} className="text-gray-700" />
+      {data.serviceSuite && data.serviceSuite.length > 0 ? (
+        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6">
+            {data.serviceSuite.map((service, idx) => <li key={idx}>{service}</li>)}
+        </ul>
+      ) : renderPlaceholder(t.serviceSuite + " (e.g., Retained Search, Board Advisory, Assessment)")}
+
+
+      <SectionTitle title={t.workExperience} icon={<Activity className="inline-block mr-2"/>} className="text-gray-700" />
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-4">
+          <h3 className="text-lg font-semibold text-gray-700">{exp.title} at {exp.company}</h3>
+          <p className="text-sm text-gray-500">{exp.dates}</p>
+          <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 text-gray-600">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+
+      <SectionTitle title={t.typicalMandates} icon={<FolderKanban className="inline-block mr-2"/>} className="text-gray-700" />
+      {data.typicalMandates && data.typicalMandates.length > 0 ? (
+        <ul className="list-disc list-inside text-md text-gray-600 pl-4 mb-6">
+            {data.typicalMandates.map((mandate, idx) => <li key={idx}>{mandate}</li>)}
+        </ul>
+      ) : renderPlaceholder(t.typicalMandates)}
+      
+      <SectionTitle title={t.testimonials} icon={<Star className="inline-block mr-2"/>} className="text-gray-700" />
+      {data.testimonials && data.testimonials.length > 0 ? (
+        data.testimonials.map((testimonial, idx) => (
+          <blockquote key={idx} className="italic text-md text-gray-600 border-l-4 border-gray-300 pl-4 mb-3">
+            "{testimonial.quote}" <cite className="block not-italic text-sm text-gray-500">- {testimonial.author}</cite>
+          </blockquote>
+        ))
+      ) : renderPlaceholder(t.testimonials)}
+
+
+      <SectionTitle title={t.education} icon={<Award className="inline-block mr-2"/>} className="text-gray-700" />
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3 text-gray-600">
+          <h3 className="text-lg font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-sm text-gray-500">{edu.dates}</p>
+        </div>
+      ))}
+
+      <SectionTitle title={t.skills} icon={<Cpu className="inline-block mr-2"/>} className="text-gray-700" />
+      <p className="text-md text-gray-600 mb-6">{data.skills.join(' • ')}</p>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <SectionTitle title={t.languages} icon={<Globe className="inline-block mr-2"/>} className="text-gray-700" />
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-md text-gray-600">{lang.language}: {lang.proficiency}</p>
           ))}
         </>
       )}
@@ -308,9 +968,17 @@ const FinanceTemplate = ({ data }: { data: CVData }) => {
 const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVData}> }[] = [
   { id: 'classic', name: 'Classic', component: ClassicTemplate },
   { id: 'photoRight', name: 'Photo Right', component: PhotoRightTemplate },
-  { id: 'anonymized', name: 'Anonymized', component: AnonymizedTemplate },
   { id: 'marketing', name: 'Marketing', component: MarketingTemplate },
-  { id: 'finance', name: 'Finance', component: FinanceTemplate }, // Renamed from Finance (Dark)
+  { id: 'anonymizedConfidential', name: 'Anonymized Confidential', component: AnonymizedConfidentialTemplate },
+  { id: 'financePrivateEquity', name: 'Finance & PE', component: FinancePrivateEquityTemplate },
+  { id: 'dataDrivenExecutive', name: 'Data-Driven Exec.', component: DataDrivenExecutiveTemplate },
+  { id: 'automationSpecialist', name: 'Automation Specialist', component: AutomationSpecialistTemplate },
+  { id: 'leadershipAdvisory', name: 'Leadership/Advisory', component: LeadershipAdvisoryTemplate },
+  { id: 'internationalHeadhunter', name: 'Intl. Headhunter', component: InternationalHeadhunterTemplate },
+  { id: 'techStartupsFocus', name: 'Tech/Startups Focus', component: TechStartupsFocusTemplate },
+  { id: 'searchResearcherAnalyst', name: 'Researcher/Analyst', component: SearchResearcherAnalystTemplate },
+  { id: 'performanceOptimizedConsultant', name: 'Performance Optimized', component: PerformanceOptimizedConsultantTemplate },
+  { id: 'classicBoutiqueSearch', name: 'Classic Boutique', component: ClassicBoutiqueSearchTemplate },
 ];
 
 
@@ -326,86 +994,73 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
 
   const handlePrint = () => {
     const printContents = document.getElementById('cv-preview-area')?.innerHTML;
-    const originalContents = document.body.innerHTML;
-
+    
     if (printContents) {
       const originalBodyStyles = document.body.className;
       const originalBodyInlineStyles = document.body.style.cssText;
       
-      // Store original styles from head to reapply them later
-      const originalHeadStyles = Array.from(document.head.getElementsByTagName('style')).map(s => s.innerHTML);
-      const originalHeadLinks = Array.from(document.head.getElementsByTagName('link')).map(l => l.outerHTML);
+      const originalHeadStyles: string[] = [];
+      document.head.querySelectorAll('style').forEach(s => originalHeadStyles.push(s.innerHTML));
+      const originalHeadLinks: string[] = [];
+      document.head.querySelectorAll('link[rel="stylesheet"]').forEach(l => originalHeadLinks.push(l.outerHTML));
 
+      // Create a new window or iframe for printing
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert("Please allow popups for this website to print the CV.");
+        return;
+      }
 
-      document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
-      document.body.className = ''; // Clear body classes for print
-      document.body.style.cssText = ''; // Clear inline body styles for print
+      printWindow.document.write('<html><head><title>Print CV</title>');
       
-      // Remove existing style tags to avoid conflicts, except for print-specific ones we add
-      Array.from(document.head.getElementsByTagName('style')).forEach(s => s.remove());
-      Array.from(document.head.getElementsByTagName('link')).filter(l => l.rel === 'stylesheet').forEach(l => l.remove());
+      // Re-apply original styles and links to the new window
+      originalHeadLinks.forEach(linkHTML => printWindow.document.write(linkHTML));
+      originalHeadStyles.forEach(styleContent => {
+        const styleEl = printWindow.document.createElement('style');
+        styleEl.type = 'text/css';
+        styleEl.appendChild(printWindow.document.createTextNode(styleContent));
+        printWindow.document.headappendChild(styleEl);
+      });
 
-
-      const style = document.createElement('style');
-      style.innerHTML = `
-        @media print {
-          body * { visibility: hidden; }
-          .print-container, .print-container * { visibility: visible; }
-          .print-container { 
-            position: absolute; 
-            left: 0; 
-            top: 0; 
-            width: 100%;
-            transform: scale(1) !important; 
-            margin: 0 !important;
-            padding: 0 !important;
-          }
-          .print-container > div { /* The A4 styled div */
+      // Add specific print styles to ensure only the CV is printed correctly
+       const printSpecificStyle = printWindow.document.createElement('style');
+       printSpecificStyle.innerHTML = `
+         @media print {
+           body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+           .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; transform: scale(1) !important; box-shadow: none !important; border: none !important; }
+           .print-container > div { /* The A4 styled div */
              margin: 0 auto !important; 
              box-shadow: none !important; 
              border: none !important;
-             transform: scale(1) !important; /* Ensure no scaling from previewer is printed */
-          }
-           /* Re-apply essential global styles if needed, or ensure CV templates are self-contained */
-          body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
-          /* Add any other essential base styles from globals.css if they are stripped and needed */
-          .bg-white { background-color: #fff !important; }
-          .text-gray-900 { color: #1a202c !important; } 
-          /* Add more specific styles from your templates if they don't print correctly */
-        }
-      `;
-      document.head.appendChild(style);
-      
-      window.print();
-      
-      // Restore original content and styles
-      document.body.innerHTML = originalContents;
-      document.body.className = originalBodyStyles;
-      document.body.style.cssText = originalBodyInlineStyles;
-      
-      // Remove our print style
-      document.head.removeChild(style);
-
-      // Restore original styles in head
-      originalHeadStyles.forEach(sContent => {
-        const restoredStyle = document.createElement('style');
-        restoredStyle.innerHTML = sContent;
-        document.head.appendChild(restoredStyle);
-      });
-      originalHeadLinks.forEach(lHTML => {
-         const tempDiv = document.createElement('div');
-         tempDiv.innerHTML = lHTML;
-         if (tempDiv.firstChild) {
-            document.head.appendChild(tempDiv.firstChild);
+             page-break-inside: avoid; /* Try to keep template on one page if possible */
+           }
+           /* Ensure specific Tailwind classes like bg-white and text colors print */
+           .bg-white { background-color: #fff !important; }
+           .text-gray-900 { color: #1a202c !important; } 
+           /* Add more specific styles from your templates if they don't print correctly */
          }
-      });
-
+       `;
+       printWindow.document.head.appendChild(printSpecificStyle);
+      
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(`<div class="print-container">${printContents}</div>`);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      
+      // Delay print to allow content to load
+      setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+        // printWindow.close(); // Optional: close window after print
+      }, 500);
 
     } else {
       // Fallback if printContents is not found
+      alert("Could not find CV content to print.");
       window.print();
     }
   };
+
 
   return (
     <div className="h-full flex flex-col p-4 bg-muted/30 rounded-lg shadow-sm">
@@ -421,7 +1076,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
                 key={template.id}
                 variant={selectedTemplate === template.id ? 'default' : 'outline'}
                 onClick={() => setSelectedTemplate(template.id)}
-                className="flex-grow sm:flex-grow-0"
+                className="flex-grow sm:flex-grow-0 text-xs sm:text-sm"
               >
                 {template.name}
               </Button>
@@ -437,7 +1092,8 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
         <div id="cv-preview-area">
             {cvData && CurrentTemplate ? (
               // The scaling is applied here for preview purposes. The print function attempts to undo this.
-              <div className="transform scale-[0.80] origin-top mx-auto" style={{ width: 'calc(595px * 0.80)' }}> 
+              // Adjusted scale and width for larger preview, original 595px for A4 width, 840px now for preview.
+              <div className="transform scale-[0.70] origin-top mx-auto" style={{ width: 'calc(840px / 0.70 * 0.70)' }}> 
                 <CurrentTemplate data={cvData} />
               </div>
             ) : (
@@ -452,4 +1108,3 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     </div>
   );
 }
-
