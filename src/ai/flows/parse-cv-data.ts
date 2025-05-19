@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -24,7 +25,7 @@ const ParseCvDataOutputSchema = z.object({
   personalInfo: z.object({
     name: z.string().describe('The full name of the person.'),
     contactInfo: z.object({
-      email: z.string().describe('The email address of the person.'),
+      email: z.string().describe('The email address of the person.'), // Removed .email() validation
       phone: z.string().describe('The phone number of the person.'),
       linkedin: z.string().optional().describe('The LinkedIn profile URL of the person, if available.'),
     }).describe('Contact information of the person.'),
@@ -53,6 +54,7 @@ const ParseCvDataOutputSchema = z.object({
       proficiency: z.string().describe('The proficiency level in the language.'),
     })
   ).describe('A list of languages spoken and proficiency levels.'),
+  detectedLanguage: z.string().optional().describe('The detected primary language of the CV content (e.g., "en", "fr"). Return only the two-letter ISO 639-1 code.'),
 });
 export type ParseCvDataOutput = z.infer<typeof ParseCvDataOutputSchema>;
 
@@ -74,10 +76,11 @@ const prompt = ai.definePrompt({
   - Education (institution, degree, dates, description)
   - Skills (list of skills)
   - Languages (language, proficiency)
+  - Detected Language (the primary language of the CV content, e.g., "en" for English, "fr" for French. Return only the two-letter ISO 639-1 code for this field.)
 
-  The CV may be in either English or French.  You must auto-detect the language.
+  The CV may be in either English or French. You must auto-detect the language and populate the 'detectedLanguage' field with its ISO 639-1 code.
 
-  Return the data in JSON format, according to the schema provided.  The schema Zod descriptions describe how to populate the output fields.
+  Return the data in JSON format, according to the schema provided. The schema Zod descriptions describe how to populate the output fields.
 
   CV Data: {{media url=pdfDataUri}}
   `,
@@ -94,4 +97,3 @@ const parseCvDataFlow = ai.defineFlow(
     return output!;
   }
 );
-

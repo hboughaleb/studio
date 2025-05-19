@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { ReactNode } from 'react';
@@ -17,7 +18,8 @@ export function CVDataProvider({ children }: { children: ReactNode }) {
     setCvDataState(data);
     if (data) {
       // also update parsedCvData if full cvData is set
-      const { photo, fileName, ...parsed } = data;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { photo, fileName, detectedLanguage, ...parsed } = data;
       setParsedCvDataState(parsed);
     } else {
       setParsedCvDataState(null);
@@ -30,9 +32,10 @@ export function CVDataProvider({ children }: { children: ReactNode }) {
       setCvDataState(prevCvData => ({
         ...(prevCvData || createEmptyCvData()), // ensure prevCvData is not null
         ...data,
-        // keep photo and fileName if they exist
+        // keep photo and fileName if they exist, and set detectedLanguage
         photo: prevCvData?.photo || undefined,
         fileName: prevCvData?.fileName || undefined,
+        detectedLanguage: data.detectedLanguage || prevCvData?.detectedLanguage || 'en',
       }));
     } else {
       setCvDataState(null);

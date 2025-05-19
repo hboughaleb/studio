@@ -1,8 +1,10 @@
+
 import type { ParseCvDataOutput } from '@/ai/flows/parse-cv-data';
 
 export interface CVData extends ParseCvDataOutput {
   photo?: string; // Data URI for the photo
   fileName?: string; // Original file name of the uploaded CV
+  detectedLanguage?: string; // e.g., "en", "fr"
 }
 
 export type CVTemplate =
@@ -40,4 +42,5 @@ export const createEmptyCvData = (): CVData => ({
   languages: [],
   photo: undefined,
   fileName: undefined,
+  detectedLanguage: 'en', // Default to English
 });

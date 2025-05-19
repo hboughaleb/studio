@@ -13,67 +13,61 @@ import { Eye, Printer } from 'lucide-react';
 // Common styling for A4-like preview
 const a4Style = "p-8 border rounded-md shadow-lg min-h-[842px] w-[595px] mx-auto";
 
+// --- TRANSLATION HELPER ---
+const translations = {
+  en: {
+    profileSummary: "Profile Summary",
+    workExperience: "Work Experience",
+    education: "Education",
+    skills: "Skills",
+    languages: "Languages",
+    candidateProfile: "Candidate Profile",
+    contactUponRequest: "Contact information available upon request.",
+    keyAchievementsProfile: "Key Achievements & Profile",
+    professionalJourney: "Professional Journey",
+    skillsSnapshot: "Skills Snapshot",
+    educationCredentials: "Education & Credentials",
+  },
+  fr: {
+    profileSummary: "Résumé du Profil",
+    workExperience: "Expérience Professionnelle",
+    education: "Formation",
+    skills: "Compétences",
+    languages: "Langues",
+    candidateProfile: "Profil du Candidat",
+    contactUponRequest: "Coordonnées disponibles sur demande.",
+    keyAchievementsProfile: "Réalisations Clés & Profil",
+    professionalJourney: "Parcours Professionnel",
+    skillsSnapshot: "Aperçu des Compétences",
+    educationCredentials: "Formation & Diplômes",
+  },
+};
+
+const getTranslations = (lang?: string) => {
+  if (lang === 'fr') return translations.fr;
+  return translations.en; // Default to English
+};
+
+
 // --- TEMPLATE COMPONENTS ---
 
-const ClassicTemplate = ({ data }: { data: CVData }) => (
-  <div className={`${a4Style} bg-white text-black`}>
-    {data.photo && (
-      <div className="mb-4 text-center">
-        <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md" data-ai-hint="professional portrait" />
-      </div>
-    )}
-    <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
-    <p className="text-sm text-gray-600 text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-    {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
-    
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Profile Summary</h2>
-    <p className="text-sm whitespace-pre-line">{data.profile}</p>
-
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Work Experience</h2>
-    {data.experience.map((exp, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
-        <p className="text-xs text-gray-500">{exp.dates}</p>
-        <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
-          {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
-        </ul>
-      </div>
-    ))}
-
-     <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Education</h2>
-    {data.education.map((edu, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
-        <p className="text-xs text-gray-500">{edu.dates}</p>
-        {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
-      </div>
-    ))}
-
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Skills</h2>
-    <p className="text-sm">{data.skills.join(', ')}</p>
-
-    {data.languages && data.languages.length > 0 && (
-      <>
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Languages</h2>
-        {data.languages.map((lang, index) => (
-          <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
-        ))}
-      </>
-    )}
-  </div>
-);
-
-const PhotoRightTemplate = ({ data }: { data: CVData }) => (
-  <div className={`${a4Style} bg-white text-black flex gap-6`}>
-    <div className="flex-grow w-2/3">
-      <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
-      <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
-    
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Profile Summary</h2>
+const ClassicTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} bg-white text-black`}>
+      {data.photo && (
+        <div className="mb-4 text-center">
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full mx-auto shadow-md" data-ai-hint="professional portrait" />
+        </div>
+      )}
+      <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
+      <p className="text-sm text-gray-600 text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+      
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
       <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Work Experience</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
       {data.experience.map((exp, index) => (
         <div key={index} className="mb-3">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
@@ -84,7 +78,7 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => (
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Education</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
       {data.education.map((edu, index) => (
         <div key={index} className="mb-3">
           <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
@@ -93,175 +87,228 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => (
         </div>
       ))}
 
-      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Skills</h2>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
       <p className="text-sm">{data.skills.join(', ')}</p>
 
       {data.languages && data.languages.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Languages</h2>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
           {data.languages.map((lang, index) => (
             <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
           ))}
         </>
       )}
     </div>
-    {data.photo && (
-      <div className="w-1/3 pl-6 border-l border-gray-200">
-        <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-lg shadow-md mb-4 mx-auto mt-2" data-ai-hint="professional portrait" />
-      </div>
-    )}
-  </div>
-);
+  );
+};
 
-const AnonymizedTemplate = ({ data }: { data: CVData }) => (
-  <div className={`${a4Style} bg-white text-black`}>
-    {/* Personal info intentionally omitted or generalized for anonymity */}
-    <h1 className="text-3xl font-bold mb-1 text-center">Candidate Profile</h1>
-    <p className="text-sm text-gray-600 text-center mb-4">Contact information available upon request.</p>
-    
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Profile Summary</h2>
-    <p className="text-sm whitespace-pre-line">{data.profile}</p>
+const PhotoRightTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} bg-white text-black flex gap-6`}>
+      <div className="flex-grow w-2/3">
+        <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
+        <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+        {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+      
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
+        <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Work Experience</h2>
-    {data.experience.map((exp, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
-        <p className="text-xs text-gray-500">{exp.dates}</p>
-         <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
-          {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
-        </ul>
-      </div>
-    ))}
-     <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Education</h2>
-    {data.education.map((edu, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
-        <p className="text-xs text-gray-500">{edu.dates}</p>
-        {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
-      </div>
-    ))}
-    <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Skills</h2>
-    <p className="text-sm">{data.skills.join(', ')}</p>
-
-    {data.languages && data.languages.length > 0 && (
-      <>
-        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">Languages</h2>
-        {data.languages.map((lang, index) => (
-          <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+        {data.experience.map((exp, index) => (
+          <div key={index} className="mb-3">
+            <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
+            <p className="text-xs text-gray-500">{exp.dates}</p>
+            <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
+              {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+            </ul>
+          </div>
         ))}
-      </>
-    )}
-    {/* Photo is intentionally omitted */}
-  </div>
-);
 
-const MarketingTemplate = ({ data }: { data: CVData }) => (
-  // Placeholder - visually similar to Classic for now, but can be customized
-  <div className={`${a4Style} bg-white text-black border-2 border-accent`}>
-    {data.photo && (
-      <div className="mb-6 text-center">
-        <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl" data-ai-hint="dynamic portrait"/>
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+        {data.education.map((edu, index) => (
+          <div key={index} className="mb-3">
+            <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+            <p className="text-xs text-gray-500">{edu.dates}</p>
+            {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
+          </div>
+        ))}
+
+        <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
+        <p className="text-sm">{data.skills.join(', ')}</p>
+
+        {data.languages && data.languages.length > 0 && (
+          <>
+            <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+            {data.languages.map((lang, index) => (
+              <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+            ))}
+          </>
+        )}
       </div>
-    )}
-    <h1 className="text-4xl font-extrabold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
-    <p className="text-md text-accent text-center font-semibold mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-    {data.personalInfo.contactInfo.linkedin && <p className="text-md text-blue-500 text-center mb-6 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
-    
-    <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">Key Achievements & Profile</h2>
-    <p className="text-md whitespace-pre-line italic">{data.profile}</p>
-
-    <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">Professional Journey</h2>
-    {data.experience.map((exp, index) => (
-      <div key={index} className="mb-4 p-3 bg-secondary/30 rounded-lg">
-        <h3 className="text-lg font-bold text-primary">{exp.title}</h3>
-        <p className="text-sm font-semibold text-accent-foreground/80">{exp.company} | {exp.dates}</p>
-        <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 mt-1">
-         {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
-        </ul>
-      </div>
-    ))}
-
-    <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">Skills Snapshot</h2>
-    <div className="flex flex-wrap gap-2 mb-4">
-        {data.skills.map(skill => <span key={skill} className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium shadow-md">{skill}</span>)}
+      {data.photo && (
+        <div className="w-1/3 pl-6 border-l border-gray-200">
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={150} height={150} className="rounded-lg shadow-md mb-4 mx-auto mt-2" data-ai-hint="professional portrait" />
+        </div>
+      )}
     </div>
+  );
+};
 
-     <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">Education & Credentials</h2>
-    {data.education.map((edu, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-lg font-semibold">{edu.degree}</h3>
-        <p className="text-md text-gray-700">{edu.institution} ({edu.dates})</p>
-        {edu.description && <p className="text-sm whitespace-pre-line text-gray-600">{edu.description}</p>}
-      </div>
-    ))}
-    
-    {data.languages && data.languages.length > 0 && (
-      <>
-        <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">Languages</h2>
-        {data.languages.map((lang, index) => (
-          <p key={index} className="text-md">{lang.language}: <span className="font-semibold">{lang.proficiency}</span></p>
-        ))}
-      </>
-    )}
-  </div>
-);
+const AnonymizedTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} bg-white text-black`}>
+      <h1 className="text-3xl font-bold mb-1 text-center">{t.candidateProfile}</h1>
+      <p className="text-sm text-gray-600 text-center mb-4">{t.contactUponRequest}</p>
+      
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
+      <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-const FinanceTemplate = ({ data }: { data: CVData }) => (
-  // Dark theme for Finance
-  <div className={`${a4Style} bg-gray-800 text-gray-100 dark`}>
-    <style jsx global>{`
-      .dark h1, .dark h2, .dark h3 { color: #E0F2F1; } /* Light Teal for headers */
-      .dark p { color: #B2DFDB; } /* Lighter Teal for text */
-      .dark .text-gray-500 { color: #80CBC4 !important; } /* Teal for dates etc */
-      .dark .text-blue-600 { color: #4DB6AC !important; } /* Teal for links */
-      .dark .border-gray-300 { border-color: #4DB6AC !important; } /* Teal for borders */
-      .dark .text-primary { color: #80CBC4 !important; } /* Override primary for dark template */
-    `}</style>
-    {data.photo && (
-      <div className="mb-4 text-center">
-         <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-teal-400" data-ai-hint="formal portrait"/>
-      </div>
-    )}
-    <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
-    <p className="text-sm text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-    {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
-    
-    <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">Profile Summary</h2>
-    <p className="text-sm whitespace-pre-line">{data.profile}</p>
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.workExperience}</h2>
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
+          <p className="text-xs text-gray-500">{exp.dates}</p>
+          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.education}</h2>
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-xs text-gray-500">{edu.dates}</p>
+          {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
+        </div>
+      ))}
+      <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.skills}</h2>
+      <p className="text-sm">{data.skills.join(', ')}</p>
 
-    <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">Work Experience</h2>
-    {data.experience.map((exp, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
-        <p className="text-xs">{exp.dates}</p>
-        <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.languages}</h2>
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
+
+const MarketingTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} bg-white text-black border-2 border-accent`}>
+      {data.photo && (
+        <div className="mb-6 text-center">
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full mx-auto ring-4 ring-primary/50 p-1 shadow-xl" data-ai-hint="dynamic portrait"/>
+        </div>
+      )}
+      <h1 className="text-4xl font-extrabold mb-1 text-center text-primary">{data.personalInfo.name}</h1>
+      <p className="text-md text-accent text-center font-semibold mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-md text-blue-500 text-center mb-6 hover:underline">{data.personalInfo.contactInfo.linkedin}</p>}
+      
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.keyAchievementsProfile}</h2>
+      <p className="text-md whitespace-pre-line italic">{data.profile}</p>
+
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.professionalJourney}</h2>
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-4 p-3 bg-secondary/30 rounded-lg">
+          <h3 className="text-lg font-bold text-primary">{exp.title}</h3>
+          <p className="text-sm font-semibold text-accent-foreground/80">{exp.company} | {exp.dates}</p>
+          <ul className="list-disc list-inside text-md whitespace-pre-line pl-4 mt-1">
           {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
-        </ul>
+          </ul>
+        </div>
+      ))}
+
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.skillsSnapshot}</h2>
+      <div className="flex flex-wrap gap-2 mb-4">
+          {data.skills.map(skill => <span key={skill} className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium shadow-md">{skill}</span>)}
       </div>
-    ))}
 
-     <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">Education</h2>
-    {data.education.map((edu, index) => (
-      <div key={index} className="mb-3">
-        <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
-        <p className="text-xs">{edu.dates}</p>
-        {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
-      </div>
-    ))}
+      <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.educationCredentials}</h2>
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-lg font-semibold">{edu.degree}</h3>
+          <p className="text-md text-gray-700">{edu.institution} ({edu.dates})</p>
+          {edu.description && <p className="text-sm whitespace-pre-line text-gray-600">{edu.description}</p>}
+        </div>
+      ))}
+      
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <h2 className="text-2xl font-bold border-b-4 border-primary pb-2 mt-8 mb-3 text-accent">{t.languages}</h2>
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-md">{lang.language}: <span className="font-semibold">{lang.proficiency}</span></p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
 
-    <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">Skills</h2>
-    <p className="text-sm">{data.skills.join(', ')}</p>
+const FinanceTemplate = ({ data }: { data: CVData }) => {
+  const t = getTranslations(data.detectedLanguage);
+  return (
+    <div className={`${a4Style} bg-gray-800 text-gray-100 dark`}>
+      <style jsx global>{`
+        .dark h1, .dark h2, .dark h3 { color: #E0F2F1; } /* Light Teal for headers */
+        .dark p { color: #B2DFDB; } /* Lighter Teal for text */
+        .dark .text-gray-500 { color: #80CBC4 !important; } /* Teal for dates etc */
+        .dark .text-blue-600 { color: #4DB6AC !important; } /* Teal for links */
+        .dark .border-gray-300 { border-color: #4DB6AC !important; } /* Teal for borders */
+        .dark .text-primary { color: #80CBC4 !important; } /* Override primary for dark template */
+      `}</style>
+      {data.photo && (
+        <div className="mb-4 text-center">
+          <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full mx-auto border-2 border-teal-400" data-ai-hint="formal portrait"/>
+        </div>
+      )}
+      <h1 className="text-3xl font-bold mb-1 text-center">{data.personalInfo.name}</h1>
+      <p className="text-sm text-center mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+      {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-center mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+      
+      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.profileSummary}</h2>
+      <p className="text-sm whitespace-pre-line">{data.profile}</p>
 
-    {data.languages && data.languages.length > 0 && (
-      <>
-        <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">Languages</h2>
-        {data.languages.map((lang, index) => (
-          <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
-        ))}
-      </>
-    )}
-  </div>
-);
+      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.workExperience}</h2>
+      {data.experience.map((exp, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{exp.title} <span className="font-normal">at</span> {exp.company}</h3>
+          <p className="text-xs">{exp.dates}</p>
+          <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4">
+            {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
+          </ul>
+        </div>
+      ))}
+
+      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.education}</h2>
+      {data.education.map((edu, index) => (
+        <div key={index} className="mb-3">
+          <h3 className="text-md font-semibold">{edu.degree} - {edu.institution}</h3>
+          <p className="text-xs">{edu.dates}</p>
+          {edu.description && <p className="text-sm whitespace-pre-line">{edu.description}</p>}
+        </div>
+      ))}
+
+      <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.skills}</h2>
+      <p className="text-sm">{data.skills.join(', ')}</p>
+
+      {data.languages && data.languages.length > 0 && (
+        <>
+          <h2 className="text-xl font-semibold border-b-2 pb-1 mt-6 mb-2">{t.languages}</h2>
+          {data.languages.map((lang, index) => (
+            <p key={index} className="text-sm">{lang.language}: {lang.proficiency}</p>
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
 
 
 const templates: { id: CVTemplate; name: string; component: React.FC<{data: CVData}> }[] = [
@@ -284,18 +331,15 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
   const CurrentTemplate = templates.find(t => t.id === selectedTemplate)?.component;
 
   const handlePrint = () => {
-    // Attempt to target the preview for printing
     const printContents = document.getElementById('cv-preview-area')?.innerHTML;
     const originalContents = document.body.innerHTML;
 
     if (printContents) {
-      // Temporarily hide other elements and set body to preview content
       const originalStyles = document.body.style.cssText;
       document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
       
-      // Add print-specific styles
       const style = document.createElement('style');
-      style.innerHTML = `
+      style.innerHTML = \`
         @media print {
           body * { visibility: hidden; }
           .print-container, .print-container * { visibility: visible; }
@@ -304,32 +348,23 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
             left: 0; 
             top: 0; 
             width: 100%;
-            transform: scale(1) !important; /* Ensure no scaling for print */
+            transform: scale(1) !important; 
           }
-          /* Ensure A4 template styles apply correctly */
           .print-container > div { 
-             margin: 0 auto !important; /* Center content */
-             box-shadow: none !important; /* Remove shadow for print */
-             border: none !important; /* Remove border for print */
+             margin: 0 auto !important; 
+             box-shadow: none !important; 
+             border: none !important; 
           }
         }
-      `;
+      \`;
       document.head.appendChild(style);
       
       window.print();
       
-      // Restore original content and styles
       document.body.innerHTML = originalContents;
       document.body.style.cssText = originalStyles;
       document.head.removeChild(style);
-      // Re-initialize any scripts or event listeners if necessary, though Next.js might handle this
-      // For complex apps, a full page reload or more sophisticated state restoration might be needed.
-      // For this app, we might need to re-render or re-attach listeners if issues occur.
-      // For now, let's assume simple restoration is enough.
-      // window.location.reload(); // A more forceful way if simple restoration fails
-
     } else {
-      // Fallback to browser's default print if specific area not found
       window.print();
     }
   };
@@ -361,10 +396,9 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       </Card>
       
       <ScrollArea className="flex-grow bg-background p-2 md:p-4 rounded-md shadow-inner">
-        <div id="cv-preview-area"> {/* Added ID for printing */}
+        <div id="cv-preview-area">
             {cvData && CurrentTemplate ? (
               <div className="transform scale-[0.80] origin-top mx-auto" style={{ width: 'calc(595px * 0.80)' }}> 
-                {/* Scaled container to ensure content fits in scaled view. Width needs to be adjusted to content width * scale */}
                 <CurrentTemplate data={cvData} />
               </div>
             ) : (
@@ -379,4 +413,3 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     </div>
   );
 }
-
