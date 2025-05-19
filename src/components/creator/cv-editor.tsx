@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
@@ -57,6 +58,7 @@ const CVFormSchema = z.object({
   languages: z.array(LanguageSchema).optional(),
   photo: z.string().optional(),
   fileName: z.string().optional(),
+  detectedLanguage: z.string().optional(), // Ensure detectedLanguage is part of the form schema
 });
 
 
@@ -70,8 +72,9 @@ export function CVEditor() {
   });
   
   useEffect(() => {
-    // Reset form when cvData changes (e.g., after initial parsing)
+    // Reset form when cvData changes (e.g., after initial parsing or external updates)
     if (cvData) {
+      // Make sure to reset with the full CVData structure, including detectedLanguage
       methods.reset(cvData);
     }
   }, [cvData, methods, parsedCvData]);
@@ -92,8 +95,10 @@ export function CVEditor() {
         // Check if form is valid before updating context
         // This provides real-time preview updates
         methods.trigger().then(isValid => {
+          // Ensure `value` contains all fields, including `detectedLanguage`
+          const currentFullData = methods.getValues();
           if (isValid) {
-            setCvData(value as CVData);
+            setCvData(currentFullData as CVData);
           }
         });
       }
