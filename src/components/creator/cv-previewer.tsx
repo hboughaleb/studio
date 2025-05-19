@@ -339,7 +339,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
       document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
       
       const style = document.createElement('style');
-      style.innerHTML = \`
+      style.innerHTML = `
         @media print {
           body * { visibility: hidden; }
           .print-container, .print-container * { visibility: visible; }
@@ -356,7 +356,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
              border: none !important; 
           }
         }
-      \`;
+      `;
       document.head.appendChild(style);
       
       window.print();
