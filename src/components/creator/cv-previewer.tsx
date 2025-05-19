@@ -735,7 +735,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
           <div key={index} className="mb-4 last:mb-0 cv-item-block">
             <h3 className="text-md font-semibold text-primary">{exp.title} <span className="font-normal text-gray-700">at</span> {exp.company}</h3>
             <p className="text-xs text-gray-500">{exp.dates}</p>
-            <p className="text-xs mt-1 text-accent">Impact: {renderPlaceholder("Fundraising/Growth from description")}</p>
+            <div className="text-xs mt-1 text-accent">Impact: {renderPlaceholder("Fundraising/Growth from description")}</div>
             <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
               {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
             </ul>
@@ -917,7 +917,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
         <div key={index} className="mb-4 cv-item-block">
           <h3 className="text-md font-semibold">{exp.title} <span className="font-normal text-gray-600">at</span> {exp.company}</h3>
           <p className="text-xs text-gray-500">{exp.dates}</p>
-          <p className="text-xs mt-1 text-green-600">Key KPIs: {renderPlaceholder("Time-to-hire, retention, etc. from description")}</p>
+          <div className="text-xs mt-1 text-green-600">Key KPIs: {renderPlaceholder("Time-to-hire, retention, etc. from description")}</div>
           <ul className="list-disc list-inside text-sm whitespace-pre-line pl-4 mt-1">
             {exp.description.split('\n').map((line, i) => line.trim() && <li key={i}>{line.trim().replace(/^- /, '')}</li>)}
           </ul>
