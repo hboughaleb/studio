@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { Eye, Printer, Briefcase, Users, Globe, Lightbulb, Activity, Star, ShieldCheck, Bot, Landmark, FileText, MapPin, Cpu, Database, UsersRound, Trophy, BarChart3, Award, Handshake, FolderKanban, Download } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';
+// Removed static import: import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';
 
 
 // Common styling for A4-like preview
@@ -189,9 +189,13 @@ const PhotoRightTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} flex gap-6`} id="cv-content-photoright">
       <div className="flex-grow w-2/3 cv-item-block"> {/* Main content on left */}
-        <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
-        <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
-        {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600 mb-4">{data.personalInfo.contactInfo.linkedin}</p>}
+        <div className="flex items-start gap-6 mb-4">
+           <div className="flex-grow">
+            <h1 className="text-3xl font-bold mb-2">{data.personalInfo.name}</h1>
+            <p className="text-sm text-gray-600 mb-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
+            {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-600">{data.personalInfo.contactInfo.linkedin}</p>}
+          </div>
+        </div>
       
         <h2 className="text-xl font-semibold border-b-2 border-gray-300 pb-1 mt-6 mb-2 text-primary">{t.profileSummary}</h2>
         <p className="text-sm whitespace-pre-line">{data.profile}</p>
@@ -286,7 +290,7 @@ const MarketingTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} border-2 border-accent bg-white text-gray-900`} id="cv-content-marketing">
-      <div className="flex items-center gap-6 mb-6 cv-item-block">
+      <div className="flex items-start gap-6 mb-6 cv-item-block">
         {data.photo && (
           <div className="flex-shrink-0">
             <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={140} height={140} className="rounded-full ring-4 ring-primary/50 p-1 shadow-xl object-cover" data-ai-hint="dynamic portrait"/>
@@ -343,17 +347,17 @@ const FinancePrivateEquityTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-finance">
-      <div className="flex items-center justify-between mb-6 cv-item-block">
+      <div className="flex items-start gap-6 mb-6 cv-item-block">
+         {data.photo && (
+          <div className="flex-shrink-0">
+            <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full border-2 border-gray-700 object-cover" data-ai-hint="corporate headshot"/>
+          </div>
+        )}
         <div className="flex-grow">
           <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600 mt-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
           {data.personalInfo.contactInfo.linkedin && <p className="text-sm text-blue-700 hover:underline mt-1">{data.personalInfo.contactInfo.linkedin}</p>}
         </div>
-        {data.photo && (
-          <div className="flex-shrink-0 ml-6">
-            <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={100} height={100} className="rounded-full border-2 border-gray-700 object-cover" data-ai-hint="corporate headshot"/>
-          </div>
-        )}
       </div>
       
       <SectionTitle title={t.profileSummary} icon={<FileText className="inline-block mr-2"/>} className="cv-item-block" />
@@ -415,7 +419,7 @@ const DataDrivenExecutiveTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} grid grid-cols-3 gap-x-6 bg-white text-gray-900`} id="cv-content-datadriven">
       <div className="col-span-1 border-r pr-6 border-gray-200 cv-item-block"> {/* Left Column */}
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-start gap-4 mb-4">
           {data.photo && (
             <div className="flex-shrink-0">
               <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full shadow-md object-cover" data-ai-hint="professional portrait" />
@@ -483,7 +487,7 @@ const AutomationSpecialistTemplate = ({ data }: { data: CVData }) => {
   return (
     <div className={`${a4Style} flex bg-white text-gray-900`} id="cv-content-automation">
       <div className="w-1/3 bg-accent text-accent-foreground p-6 rounded-l-md cv-item-block"> {/* Dark Sidebar - adjusted w-1/3 */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-start gap-3 mb-4">
           {data.photo && (
             <div className="flex-shrink-0">
               <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={70} height={70} className="rounded-full shadow-md object-cover border-2 border-white" data-ai-hint="modern portrait" />
@@ -561,7 +565,7 @@ const LeadershipAdvisoryTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-leadership">
-      <div className="flex justify-between items-start mb-6 cv-item-block">
+      <div className="flex items-start justify-between mb-6 cv-item-block">
         <div className="flex-grow">
           <h1 className="text-3xl font-bold text-gray-800">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600 mt-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -637,7 +641,7 @@ const InternationalHeadhunterTemplate = ({ data }: { data: CVData }) => {
 
   return (
     <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-international">
-      <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary cv-item-block">
+      <div className="flex items-start justify-between mb-6 pb-4 border-b-2 border-primary cv-item-block">
         <div className="flex-grow">
           <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600 mt-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -707,7 +711,7 @@ const TechStartupsFocusTemplate = ({ data }: { data: CVData }) => {
 
   return (
     <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-techstartups">
-      <div className="flex items-center gap-6 mb-8 cv-item-block">
+      <div className="flex items-start gap-6 mb-8 cv-item-block">
         {data.photo && (
           <div className="flex-shrink-0">
             <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={120} height={120} className="rounded-full ring-4 ring-accent p-1 object-cover" data-ai-hint="dynamic portrait" />
@@ -796,7 +800,7 @@ const SearchResearcherAnalystTemplate = ({ data }: { data: CVData }) => {
 
   return (
     <div className={`${a4Style} ${smallTextStyle} bg-white text-gray-900`} id="cv-content-researcher">
-      <div className="flex items-center gap-4 mb-3 cv-item-block">
+      <div className="flex items-start gap-4 mb-3 cv-item-block">
         {data.photo && (
           <div className="flex-shrink-0">
             <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={80} height={80} className="rounded-full shadow-sm object-cover" data-ai-hint="focused headshot" />
@@ -871,7 +875,7 @@ const PerformanceOptimizedConsultantTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} bg-white text-gray-900`} id="cv-content-performance">
-      <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-primary cv-item-block">
+      <div className="flex items-start justify-between mb-6 pb-4 border-b-2 border-primary cv-item-block">
         <div className="flex-grow">
           <h1 className="text-3xl font-bold text-primary">{data.personalInfo.name}</h1>
           <p className="text-sm text-gray-600 mt-1">{data.personalInfo.contactInfo.email} | {data.personalInfo.contactInfo.phone}</p>
@@ -951,7 +955,7 @@ const ClassicBoutiqueSearchTemplate = ({ data }: { data: CVData }) => {
   const t = getTranslations(data.detectedLanguage);
   return (
     <div className={`${a4Style} font-serif bg-white text-gray-900`} id="cv-content-boutique">
-      <div className="flex items-center gap-6 mb-8 cv-item-block">
+      <div className="flex items-start gap-6 mb-8 cv-item-block">
         {data.photo && (
           <div className="flex-shrink-0">
             <Image src={data.photo} alt={data.personalInfo.name || "Profile"} width={110} height={110} className="rounded-full shadow-md object-cover border-2 border-gray-300 p-0.5" data-ai-hint="elegant portrait" />
@@ -1057,13 +1061,18 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
   const currentContentId = currentTemplateMeta?.contentId || 'cv-content-default';
 
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     const element = document.getElementById(currentContentId);
     if (!element) {
       alert("Could not find CV content to download.");
       return;
     }
     
+    // Dynamically import html2pdf
+    const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.js');
+    const html2pdf = html2pdfModule.default;
+
+
     // Temporarily adjust scale for PDF generation if it's too small in preview
     const previewArea = document.getElementById('cv-preview-area');
     let originalTransform = '';
@@ -1084,17 +1093,7 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     
     const worker = html2pdf().from(element).set(opt);
     
-    // Add CSS for print handling directly into the PDF generation context
-    // This is a more robust way to ensure print styles are applied by html2pdf
-    worker.get('pdf').then((pdf: any) => {
-      const totalPages = pdf.internal.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        pdf.setPage(i);
-        // Example of adding styles, html2pdf might not directly support adding <style> tags this way
-        // after generation. The styles should ideally be part of the 'element's content or html2canvas rendering.
-        // The page-break-inside: avoid should be handled by html2pdf's pagebreak mode or inherent CSS.
-      }
-    }).save().then(() => {
+    worker.save().then(() => {
         // Restore original scale after PDF generation
         if (previewArea && previewArea.firstElementChild) {
             (previewArea.firstElementChild as HTMLElement).style.transform = originalTransform;
@@ -1147,3 +1146,4 @@ export function CVPreviewer({ selectedTemplate, setSelectedTemplate }: CVPreview
     </div>
   );
 }
+
