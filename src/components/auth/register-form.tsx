@@ -7,8 +7,13 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { UserPlus } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { UserPlus, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { auth } from '@/lib/firebase';
+import { createUserWithEmailAndPassword, updateProfile, FirebaseError } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -17,15 +22,16 @@ const registerSchema = z.object({
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match.",
-  path: ['confirmPassword'], // Point error to confirmPassword field
+  path: ['confirmPassword'],
 });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
-  // In a real app, you'd use a mutation or function to call your auth provider
-  // const { register, error } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -39,23 +45,54 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
-    console.log('Registration data:', data);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // try {
-    //   await register(data.name, data.email, data.password);
-    //   // router.push('/dashboard'); // or wherever you want to redirect
-    // } catch (err) {
-    //   // Error will be handled
-    //   console.error("Registration failed:", err);
-    // }
-    setIsLoading(false);
-    alert('Registration functionality is not yet implemented. Check console for data.');
+    setError(null);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, {
+          displayName: data.name,
+        });
+      }
+      toast({
+        title: 'Registration Successful!',
+        description: 'Your account has been created.',
+      });
+      router.push('/'); // Redirect to homepage or dashboard
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            setError('This email address is already in use.');
+            break;
+          case 'auth/invalid-email':
+            setError('Invalid email address format.');
+            break;
+          case 'auth/weak-password':
+            setError('Password is too weak. Please choose a stronger password.');
+            break;
+          default:
+            setError('Registration failed. Please try again.');
+            break;
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+      console.error("Registration failed:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Registration Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <FormField
           control={form.control}
           name="name"
@@ -108,7 +145,6 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        {/* {error && <p className="text-sm text-destructive">{error.message}</p>} */}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>

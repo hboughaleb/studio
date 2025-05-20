@@ -92,25 +92,11 @@ Generated text for "${input.sectionType}":
     });
 
     if (!output || typeof output.generatedText !== 'string') {
-      const errorMsg = 'Invalid AI response format or empty output received.';
-      console.error(errorMsg, output);
-      // Attempt to provide a fallback or re-throw a more specific error
-      // For now, if output is just a string (unexpected but possible if schema parsing failed silently)
-      if(typeof output === 'string' && output.trim() !== '') {
-        return { generatedText: output as string };
-      }
-      // If output is an object but doesn't have generatedText
-      if(output && typeof (output as any).generatedText === 'undefined'){
-         // Check if the model might have returned the text directly due to misinterpreting the schema instruction
-         const anyOutput = output as any;
-         const keys = Object.keys(anyOutput);
-         if(keys.length === 1 && typeof anyOutput[keys[0]] === 'string'){
-            return { generatedText: anyOutput[keys[0]] as string };
-         }
-      }
+      const errorMsg = 'Invalid AI response format or empty output received from generateProfessionalDetailFlow.';
+      console.error(errorMsg, {receivedOutput: output});
       throw new Error(errorMsg);
     }
 
-    return output as GenerateProfessionalDetailOutput;
+    return output;
   }
 );

@@ -7,8 +7,13 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { LogIn } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { LogIn, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import { auth } from '@/lib/firebase';
+import { signInWithEmailAndPassword, FirebaseError } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -19,8 +24,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
-  // In a real app, you'd use a mutation or function to call your auth provider
-  // const { login, error } = useAuth(); 
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -32,23 +38,48 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
-    console.log('Login data:', data);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // try {
-    //   await login(data.email, data.password);
-    //   // router.push('/dashboard'); // or wherever you want to redirect after login
-    // } catch (err) {
-    //   // Error will be handled by a global error state or toast
-    //   console.error("Login failed:", err);
-    // }
-    setIsLoading(false);
-    alert('Login functionality is not yet implemented. Check console for data.');
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      toast({
+        title: 'Login Successful!',
+        description: 'Welcome back!',
+      });
+      router.push('/'); // Redirect to homepage or dashboard
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+          case 'auth/invalid-credential':
+            setError('Invalid email or password.');
+            break;
+          case 'auth/invalid-email':
+            setError('Invalid email address format.');
+            break;
+          default:
+            setError('Login failed. Please try again.');
+            break;
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+      console.error("Login failed:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Login Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <FormField
           control={form.control}
           name="email"
@@ -75,7 +106,6 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        {/* {error && <p className="text-sm text-destructive">{error.message}</p>} */}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>

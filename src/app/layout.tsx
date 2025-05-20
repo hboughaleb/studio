@@ -4,8 +4,13 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { CVDataProvider } from '@/contexts/CVDataContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext'; // Import AuthProvider
 import Link from 'next/link';
-import { FileText, ScanSearch, UserCircle } from 'lucide-react';
+import { FileText, ScanSearch, UserCircle, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button'; // For logout button
+import { auth } from '@/lib/firebase'; // For signOut
+import { useRouter } from 'next/navigation'; // Import useRouter if needed for logout redirect
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -22,15 +27,20 @@ export const metadata: Metadata = {
   description: 'Upload, parse, edit, and design your CV with AI assistance.',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // For now, assume user is not logged in.
-  // In a real app, this would come from an auth context.
-  const isLoggedIn = false; 
+// Client component to handle auth-dependent rendering
+function AuthAwareLayout({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  // const router = useRouter(); // If redirecting after logout
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      // router.push('/'); // Optional: redirect to home after logout
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+  
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -49,20 +59,25 @@ export default function RootLayout({
                   <Link href="/analyzer" className="flex items-center gap-1 text-sm font-medium hover:underline">
                     <ScanSearch size={18} /> Job Analyzer
                   </Link>
-                  {isLoggedIn ? (
-                     <Link href="/profile" className="flex items-center gap-1 text-sm font-medium hover:underline">
-                        <UserCircle size={18} /> Profile
-                     </Link>
-                  ) : (
+                  {!isLoading && user ? (
+                     <>
+                       <Link href="/profile" className="flex items-center gap-1 text-sm font-medium hover:underline">
+                          <UserCircle size={18} /> Profile
+                       </Link>
+                       <Button variant="ghost" size="sm" onClick={handleLogout} className="text-sm font-medium hover:underline text-primary-foreground hover:bg-primary/80">
+                          <LogOut size={18} className="mr-1" /> Logout
+                       </Button>
+                     </>
+                  ) : !isLoading ? (
                     <>
-                      <Link href="/auth/login" className="text-sm font-medium hover:underline">
-                        Login
+                      <Link href="/auth/login" className="text-sm font-medium hover:underline flex items-center gap-1">
+                        <LogIn size={18} /> Login
                       </Link>
-                      <Link href="/auth/register" className="text-sm font-medium hover:underline bg-accent text-accent-foreground px-3 py-1.5 rounded-md">
-                        Register
+                      <Link href="/auth/register" className="text-sm font-medium hover:underline bg-accent text-accent-foreground px-3 py-1.5 rounded-md flex items-center gap-1">
+                        <UserPlus size={18} /> Register
                       </Link>
                     </>
-                  )}
+                  ) : null}
                 </nav>
               </div>
             </header>
@@ -78,5 +93,18 @@ export default function RootLayout({
         </CVDataProvider>
       </body>
     </html>
+  );
+}
+
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <AuthProvider>
+      <AuthAwareLayout>{children}</AuthAwareLayout>
+    </AuthProvider>
   );
 }
