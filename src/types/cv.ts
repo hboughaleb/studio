@@ -5,7 +5,13 @@ export interface CVData extends ParseCvDataOutput {
   photo?: string; // Data URI for the photo
   fileName?: string; // Original file name of the uploaded CV
   detectedLanguage?: string; // e.g., "en", "fr"
-  // Placeholder for potential future structured data for new templates
+
+  // Fields for specialized templates
+  toolsProficiency?: string[];
+  analyticsReportingSummary?: string;
+  deiAndCulturalFitStatement?: string;
+  searchCompletionMetricsSummary?: string;
+  
   techStack?: string[];
   advisoryProjects?: Array<{ title: string; description: string }>;
   boardExperience?: string;
@@ -22,7 +28,7 @@ export interface CVData extends ParseCvDataOutput {
   typicalMandates?: string[];
   portfolioImpact?: Array<{ title: string; description: string }>;
   aiToolsUsed?: string[];
-  automatedProcessesImplemented?: Array<{ title: string; description: string; toolsUsed: string[] }>;
+  automatedProcessesImplemented?: Array<{ title: string; description: string; toolsUsed?: string[] }>;
 }
 
 export type CVTemplate =
@@ -71,6 +77,10 @@ export const createEmptyCvData = (): CVData => ({
   fileName: undefined,
   detectedLanguage: 'en', // Default to English
   // Initialize new optional fields
+  toolsProficiency: [],
+  analyticsReportingSummary: '',
+  deiAndCulturalFitStatement: '',
+  searchCompletionMetricsSummary: '',
   techStack: [],
   advisoryProjects: [],
   boardExperience: '',
