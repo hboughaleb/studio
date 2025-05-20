@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { CVDataProvider } from '@/contexts/CVDataContext';
 import Link from 'next/link';
-import { FileText } from 'lucide-react';
+import { FileText, ScanSearch } from 'lucide-react'; // Added ScanSearch
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,6 +37,14 @@ export default function RootLayout({
                   <FileText size={28} />
                   <h1 className="text-2xl font-semibold tracking-tight">ResuAI</h1>
                 </Link>
+                <nav className="flex items-center gap-4">
+                  <Link href="/creator" className="text-sm font-medium hover:underline">
+                    CV Creator
+                  </Link>
+                  <Link href="/analyzer" className="flex items-center gap-1 text-sm font-medium hover:underline">
+                    <ScanSearch size={18} /> Job Analyzer
+                  </Link>
+                </nav>
               </div>
             </header>
             <main className="flex-grow container mx-auto px-4 py-8">
