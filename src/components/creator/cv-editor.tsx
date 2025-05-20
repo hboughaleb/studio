@@ -13,6 +13,7 @@ import { ExperienceSection } from './sections/experience-section';
 import { EducationSection } from './sections/education-section';
 import { SkillsSection } from './sections/skills-section';
 import { LanguagesSection } from './sections/languages-section';
+import { ProfessionalDetailsSection } from './sections/professional-details-section'; // New Import
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -58,7 +59,40 @@ const CVFormSchema = z.object({
   languages: z.array(LanguageSchema).optional(),
   photo: z.string().optional(),
   fileName: z.string().optional(),
-  detectedLanguage: z.string().optional(), // Ensure detectedLanguage is part of the form schema
+  detectedLanguage: z.string().optional(),
+
+  // New specialized fields (all optional for now)
+  toolsProficiency: z.array(z.string().min(1, { message: "Tool proficiency cannot be empty" })).optional(),
+  analyticsReportingSummary: z.string().optional(),
+  deiAndCulturalFitStatement: z.string().optional(),
+  searchCompletionMetricsSummary: z.string().optional(),
+  
+  // Future fields to consider adding to the schema later:
+  // techStack: z.array(z.string().min(1, { message: "Tech stack item cannot be empty" })).optional(),
+  // advisoryProjects: z.array(z.object({ title: z.string().min(1), description: z.string().min(1) })).optional(),
+  // boardExperience: z.string().optional(),
+  // geographicReach: z.array(z.string().min(1)).optional(),
+  // techStacksHiredFor: z.array(z.string().min(1)).optional(),
+  // industryFocus: z.array(z.string().min(1)).optional(),
+  // researchMethodologies: z.array(z.string().min(1)).optional(),
+  // mappingTools: z.array(z.string().min(1)).optional(),
+  // publicationsProjects: z.array(z.object({ title: z.string().min(1), description: z.string().min(1) })).optional(),
+  // keyMetrics: z.array(z.object({ 
+  //   metric: z.string().min(1), 
+  //   value: z.union([z.string().min(1), z.number()]), 
+  //   visual: z.enum(['progress', 'text']).optional() 
+  // })).optional(),
+  // testimonials: z.array(z.object({ quote: z.string().min(1), author: z.string().min(1) })).optional(),
+  // clientBrands: z.array(z.string().min(1)).optional(),
+  // serviceSuite: z.array(z.string().min(1)).optional(),
+  // typicalMandates: z.array(z.string().min(1)).optional(),
+  // portfolioImpact: z.array(z.object({ title: z.string().min(1), description: z.string().min(1) })).optional(),
+  // aiToolsUsed: z.array(z.string().min(1)).optional(),
+  // automatedProcessesImplemented: z.array(z.object({ 
+  //   title: z.string().min(1), 
+  //   description: z.string().min(1), 
+  //   toolsUsed: z.array(z.string().min(1)).optional() 
+  // })).optional(),
 });
 
 
@@ -72,30 +106,24 @@ export function CVEditor() {
   });
   
   useEffect(() => {
-    // Reset form when cvData changes (e.g., after initial parsing or external updates)
     if (cvData) {
-      // Make sure to reset with the full CVData structure, including detectedLanguage
       methods.reset(cvData);
     }
   }, [cvData, methods, parsedCvData]);
 
 
   const onSubmit = (data: CVData) => {
-    setCvData(data); // Update context with new data
+    setCvData(data); 
     toast({
       title: "CV Updated",
       description: "Your changes have been saved and the preview is updated.",
     });
   };
   
-  // Watch for form changes and auto-submit (update context)
   useEffect(() => {
     const subscription = methods.watch((value, { name, type }) => {
-      if (type === 'change') { // only on user input
-        // Check if form is valid before updating context
-        // This provides real-time preview updates
+      if (type === 'change') { 
         methods.trigger().then(isValid => {
-          // Ensure `value` contains all fields, including `detectedLanguage`
           const currentFullData = methods.getValues();
           if (isValid) {
             setCvData(currentFullData as CVData);
@@ -115,7 +143,7 @@ export function CVEditor() {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6 p-4 bg-card rounded-lg shadow-sm">
         <h2 className="text-2xl font-semibold text-primary border-b pb-2">Edit Your CV</h2>
-        <Accordion type="multiple" defaultValue={['personalInfo', 'profile', 'experience', 'education', 'skills', 'languages']} className="w-full">
+        <Accordion type="multiple" defaultValue={['personalInfo', 'profile', 'experience', 'education', 'skills', 'languages', 'professionalDetails']} className="w-full">
           <AccordionItem value="personalInfo">
             <AccordionTrigger className="text-lg font-medium">Personal Information</AccordionTrigger>
             <AccordionContent>
@@ -157,6 +185,13 @@ export function CVEditor() {
               <LanguagesSection />
             </AccordionContent>
           </AccordionItem>
+          
+          <AccordionItem value="professionalDetails">
+            <AccordionTrigger className="text-lg font-medium">Professional Details (Specialized)</AccordionTrigger>
+            <AccordionContent>
+              <ProfessionalDetailsSection />
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
 
         <Button type="submit" className="w-full mt-8" size="lg">
@@ -166,6 +201,7 @@ export function CVEditor() {
         {methods.formState.errors && Object.keys(methods.formState.errors).length > 0 && (
           <div className="text-destructive text-sm mt-2">
             Please correct the errors in the form.
+            {/* <pre>{JSON.stringify(methods.formState.errors, null, 2)}</pre> */}
           </div>
         )}
       </form>
