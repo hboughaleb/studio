@@ -1,10 +1,11 @@
+
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { CVDataProvider } from '@/contexts/CVDataContext';
 import Link from 'next/link';
-import { FileText, ScanSearch } from 'lucide-react'; // Added ScanSearch
+import { FileText, ScanSearch, UserCircle } from 'lucide-react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,6 +27,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // For now, assume user is not logged in.
+  // In a real app, this would come from an auth context.
+  const isLoggedIn = false; 
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -44,6 +49,20 @@ export default function RootLayout({
                   <Link href="/analyzer" className="flex items-center gap-1 text-sm font-medium hover:underline">
                     <ScanSearch size={18} /> Job Analyzer
                   </Link>
+                  {isLoggedIn ? (
+                     <Link href="/profile" className="flex items-center gap-1 text-sm font-medium hover:underline">
+                        <UserCircle size={18} /> Profile
+                     </Link>
+                  ) : (
+                    <>
+                      <Link href="/auth/login" className="text-sm font-medium hover:underline">
+                        Login
+                      </Link>
+                      <Link href="/auth/register" className="text-sm font-medium hover:underline bg-accent text-accent-foreground px-3 py-1.5 rounded-md">
+                        Register
+                      </Link>
+                    </>
+                  )}
                 </nav>
               </div>
             </header>
