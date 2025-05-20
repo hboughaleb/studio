@@ -2,21 +2,24 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Badge } from '@/components/ui/badge';
-import { X, PlusCircle } from 'lucide-react';
+import { X, PlusCircle, Sparkles, Loader2 } from 'lucide-react';
 import type { CVData } from '@/types/cv';
+import { generateProfessionalDetail, type GenerateProfessionalDetailInput, type SectionType } from '@/ai/flows/generate-professional-detail-flow';
+import { useToast } from '@/hooks/use-toast';
+import { useCVData } from '@/contexts/CVDataContext';
+
 
 // Reusable component for managing a list of string tags
 const TagInputArray = ({ fieldName, label, placeholder }: { fieldName: keyof CVData, label: string, placeholder: string }) => {
   const { control, getValues, setValue } = useFormContext<CVData>();
   const [currentValue, setCurrentValue] = useState('');
 
-  // Ensure the field is an array, even if it's initially undefined
   const items = (getValues(fieldName) as string[] | undefined) || [];
 
   const handleAddItem = () => {
@@ -57,12 +60,12 @@ const TagInputArray = ({ fieldName, label, placeholder }: { fieldName: keyof CVD
       <FormField
         control={control}
         name={fieldName}
-        render={() => <FormMessage />} // For array-level messages if needed
+        render={() => <FormMessage />}
       />
       {items.length > 0 && (
         <div className="flex flex-wrap gap-2 pt-2">
           {items.map((item, index) => (
-            <Badge key={`${fieldName}-${index}`} variant="secondary" className="py-1 px-3 text-sm">
+            <Badge key={`${String(fieldName)}-${index}`} variant="secondary" className="py-1 px-3 text-sm">
               {item}
               <button
                 type="button"
@@ -80,10 +83,95 @@ const TagInputArray = ({ fieldName, label, placeholder }: { fieldName: keyof CVD
   );
 };
 
+interface AiGenerateButtonProps {
+  fieldName: keyof CVData;
+  sectionType: SectionType;
+  label: string;
+}
+
+const AiEnhancedTextarea = ({ fieldName, sectionType, label }: AiGenerateButtonProps) => {
+  const { control, setValue, getValues } = useFormContext<CVData>();
+  const { cvData } = useCVData();
+  const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const currentFieldValue = useWatch({ control, name: fieldName });
+
+  const handleGenerate = async () => {
+    if (!cvData) {
+      toast({ title: "CV Data Missing", description: "Please ensure CV data is loaded.", variant: "destructive" });
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const relevantCvData = {
+        profile: cvData.profile,
+        experience: cvData.experience.map(exp => ({
+          title: exp.title,
+          company: exp.company,
+          description: exp.description,
+        })),
+        skills: cvData.skills,
+      };
+
+      const input: GenerateProfessionalDetailInput = {
+        sectionType: sectionType,
+        cvContext: relevantCvData,
+        currentText: getValues(fieldName) as string || undefined,
+        language: cvData.detectedLanguage || 'en',
+      };
+      const result = await generateProfessionalDetail(input);
+      setValue(fieldName, result.generatedText as any, { shouldValidate: true, shouldDirty: true });
+      toast({ title: "Content Generated!", description: `AI has generated content for ${label}.` });
+    } catch (error) {
+      console.error(`Error generating ${label}:`, error);
+      toast({ title: "Generation Failed", description: `Could not generate content for ${label}.`, variant: "destructive" });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  
+  return (
+     <FormField
+        control={control}
+        name={fieldName}
+        render={({ field }) => (
+          <FormItem>
+            <div className="flex justify-between items-center">
+              <FormLabel>{label}</FormLabel>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="mb-1"
+              >
+                {isGenerating ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="mr-2 h-4 w-4" />
+                )}
+                Generate with AI
+              </Button>
+            </div>
+            <FormControl>
+              <Textarea
+                placeholder={`Enter or generate your ${label.toLowerCase()}...`}
+                className="min-h-[100px]"
+                {...field}
+                value={field.value || ''} 
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+  )
+}
+
 
 export function ProfessionalDetailsSection() {
-  const { control } = useFormContext<CVData>();
-
   return (
     <div className="space-y-6 p-4 border rounded-md shadow-sm bg-card">
       <TagInputArray
@@ -92,63 +180,25 @@ export function ProfessionalDetailsSection() {
         placeholder="e.g., Salesforce, Bullhorn, Tableau"
       />
 
-      <FormField
-        control={control}
-        name="analyticsReportingSummary"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Analytics & Reporting Summary</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Describe your experience with analytics and reporting in executive search..."
-                className="min-h-[100px]"
-                {...field}
-                // Ensure value is string or empty string to avoid controlled/uncontrolled issue
-                value={field.value || ''} 
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={control}
-        name="deiAndCulturalFitStatement"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>DEI & Cultural Fit Statement</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Describe your approach to DEI and assessing cultural fit..."
-                className="min-h-[100px]"
-                {...field}
-                value={field.value || ''}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <AiEnhancedTextarea
+        fieldName="analyticsReportingSummary"
+        sectionType="analyticsReportingSummary"
+        label="Analytics & Reporting Summary"
       />
       
-      <FormField
-        control={control}
-        name="searchCompletionMetricsSummary"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Search Completion Metrics Summary</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Summarize key metrics related to search completion, time-to-hire, etc..."
-                className="min-h-[100px]"
-                {...field}
-                value={field.value || ''}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+      <AiEnhancedTextarea
+        fieldName="deiAndCulturalFitStatement"
+        sectionType="deiAndCulturalFitStatement"
+        label="DEI & Cultural Fit Statement"
+      />
+      
+      <AiEnhancedTextarea
+        fieldName="searchCompletionMetricsSummary"
+        sectionType="searchCompletionMetricsSummary"
+        label="Search Completion Metrics Summary"
       />
     </div>
   );
 }
+
+    
