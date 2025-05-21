@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UserPlus, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, updateProfile, FirebaseError } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
@@ -58,8 +58,8 @@ export function RegisterForm() {
         description: 'Your account has been created.',
       });
       router.push('/'); // Redirect to homepage or dashboard
-    } catch (err) {
-      if (err instanceof FirebaseError) {
+    } catch (err: any) {
+      if (err && err.code) {
         switch (err.code) {
           case 'auth/email-already-in-use':
             setError('This email address is already in use.');

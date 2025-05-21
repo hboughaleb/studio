@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { LogIn, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword, FirebaseError } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
@@ -46,8 +46,8 @@ export function LoginForm() {
         description: 'Welcome back!',
       });
       router.push('/'); // Redirect to homepage or dashboard
-    } catch (err) {
-      if (err instanceof FirebaseError) {
+    } catch (err: any) {
+      if (err && err.code) {
         switch (err.code) {
           case 'auth/user-not-found':
           case 'auth/wrong-password':
